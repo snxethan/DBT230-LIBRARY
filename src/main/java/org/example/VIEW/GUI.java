@@ -1,5 +1,7 @@
 package org.example.VIEW;
 
+import org.example.MODEL.EmployeeClass;
+
 public class GUI {
 
     public static void start() {
@@ -22,5 +24,27 @@ public class GUI {
         System.out.println(" 1. Display All"
                         + "\n 2. Search"
                         + "\n 3. Back");
+    }
+    public static void addMenu(){
+        System.out.println("----- ADD MENU -----");
+        System.out.println(" 1. Add Employee"
+                        + "\n 2. Back");
+    }
+    public static void deleteMenu(){
+        System.out.println("----- DELETE MENU -----");
+        System.out.println(" 1. Delete Employee"
+                        + "\n 2. Back");
+    }
+    public static void updateMenu(){
+        System.out.println("----- UPDATE MENU -----");
+        System.out.println(" 1. Update Employee"
+                        + "\n 2. Back");
+    }
+
+
+    public static void displayEmployee(EmployeeClass employee){
+        System.out.println("Employee ID: " + employee.getId()
+                        + "\nName: " + employee.getFName() + " " + employee.getLName()
+                        + "\nHire Year: " + employee.getHireYear());
     }
 }
