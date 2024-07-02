@@ -67,7 +67,7 @@ public class EmployeeDatabase {
             System.out.println("\nEmployee Array sorted by ID: \n");
             employees.sort(Comparator.comparingInt(EmployeeClass::getId)); // sorts the employees by id
             for (EmployeeClass employee : employees) { // prints out the employee data from employee array list
-                System.out.println(employee.getEmployee());
+                System.out.println(employee.toString());
             }
         }
     }
