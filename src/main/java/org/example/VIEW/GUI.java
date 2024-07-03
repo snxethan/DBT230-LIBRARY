@@ -151,8 +151,8 @@ public class GUI {
     //endregion
 
     //region TIMER LOGIC
-    public static void timerMS(String name, long elapsed){
-        System.out.println("{" + name + " took " + elapsed + " ms}");
+    public static void timerOut(String name, long elapsed, String timeType){
+        System.out.println("{" + name + " took " + elapsed + " " + timeType);
     }
     public static void timerFailed(String name){
         System.out.println("{" + name + " could NOT be started}");

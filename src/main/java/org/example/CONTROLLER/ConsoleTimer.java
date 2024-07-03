@@ -15,7 +15,7 @@ public class ConsoleTimer {
      * @param name the name of the timer
      */
     public static synchronized void startTimer(String name) {
-        timers.put(name, System.currentTimeMillis());
+        timers.put(name, System.nanoTime());
     }
 
     /**
@@ -25,9 +25,35 @@ public class ConsoleTimer {
      */
     public static synchronized void stopTimer(String name) {
         Long startTime = timers.remove(name);
+        String timeType = "Nano";
         if (startTime != null) {
-            long elapsed = System.currentTimeMillis() - startTime;
-            GUI.timerMS(name, elapsed);
+            long elapsed = System.nanoTime() - startTime;
+
+            if (elapsed > 1_000_000){
+                elapsed /= 1_000_000;// nano to milliseconds
+                timeType = "MS";
+
+                if (elapsed > 1_000){
+                    elapsed /= 1_000;//milliseconds to seconds
+                    timeType = "Sec";
+
+                    if (elapsed > 60){
+                        elapsed /= 60;//second to minutes
+                        timeType = "Min";
+
+                        if (elapsed > 60){
+                            elapsed /= 60;//minutes to hours
+                            timeType = "Hr";
+
+                            if (elapsed > 24){
+                                elapsed /= 24;//hours to days
+                                timeType = "Days";
+                            }
+                        }
+                    }
+                }
+            }
+            GUI.timerOut(name, elapsed, timeType);
         } else {
             GUI.timerFailed(name);
         }
