@@ -186,17 +186,25 @@ public class EmployeeDatabase {
      * @return the next id
      */
     public static int findNextID() {
-        ConsoleTimer.startTimer("FindNextID"); // starts the timer
+        ConsoleTimer.startTimer("FindNextID");
         Controller.updateEmployeesFromFile();
-        int nextID = 1; // sets the next id to 1
+        // Sort employees by ID to ensure they are in ascending order
+        sortEmployees();
 
-        for (EmployeeClass employee : employees) { // for each employee in the array list
-            if (employee.getId() >= nextID) { // if the employee id is greater than or equal to the next id
-                nextID = employee.getId() + 1; // sets the next id to the employee id plus 1
+        int nextID = 1; // Start checking from the smallest possible positive ID
+
+        for (EmployeeClass employee : employees) {
+            if (employee.getId() == nextID) {
+                // If the current ID matches the nextID, increment nextID to check for the next possible gap
+                nextID++;
+            } else if (employee.getId() > nextID) {
+                // If a gap is found, nextID is the smallest missing ID, so break the loop
+                break;
             }
         }
-        ConsoleTimer.stopTimer("FindNextID"); // stops the timer
-        return nextID; // returns the next id
+
+        ConsoleTimer.stopTimer("FindNextID");
+        return nextID; // Returns the smallest missing ID or the next ID after the highest current ID
     }
     //endregion
 

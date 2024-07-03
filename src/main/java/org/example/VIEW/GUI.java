@@ -118,17 +118,17 @@ public class GUI {
                 """);
     }
     public static void employeeSearch(String criteria){
-        System.out.println("Enter Employee " + criteria + ": ");
+        System.out.println("\nEnter Employee " + criteria + ": ");
     }
 
     public static void askFirstName() {
-        System.out.println("Enter Employee's First Name: ");
+        System.out.println("\nEnter Employee's First Name: ");
     }
     public static void askLastName() {
-        System.out.println("Enter Employee's Last Name: ");
+        System.out.println("\nEnter Employee's Last Name: ");
     }
     public static void askHireYear() {
-        System.out.println("Enter Employee's Hire Year: ");
+        System.out.println("\nEnter Employee's Hire Year: ");
     }
     //endregion
 

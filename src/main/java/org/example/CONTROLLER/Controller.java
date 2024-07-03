@@ -198,6 +198,7 @@ public class Controller {
         EmployeeClass employee = new EmployeeClass(ID, fname, lname, hireYear);
         if(EmployeeDatabase.addEmployeeToArray(employee)){
             //employee can be added
+            EmployeeDatabase.sortEmployees();
             EmployeeFiles.addFile(employee); // saves the employee data to a file
         } else {
             //employee already exists

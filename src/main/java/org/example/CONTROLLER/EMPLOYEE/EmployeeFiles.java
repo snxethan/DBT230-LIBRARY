@@ -188,7 +188,7 @@ public class EmployeeFiles {
         for (String extension : extensions) { // Loop through the extensions
             File file = new File(EmployeeFiles.uploadPath + "/" + id + extension); // Create a file object
             if (file.exists() && file.delete()) { // Check if the file exists and delete it
-                GUI.displayMessage("Deleted `file`: " + file.getName()); // Print a success message
+                GUI.displayMessage("Deleted file: '" + file.getName() + "'"); // Print a success message
                 return; // Exit the method
             }
         }
