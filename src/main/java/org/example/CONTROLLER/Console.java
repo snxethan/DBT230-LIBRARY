@@ -10,6 +10,7 @@ public class Console {
 
     public static BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 
+    //region READ INPUT
     /**
      * Reads an integer from the console.
      * If the input is not an integer, it will print an error message.
@@ -54,4 +55,5 @@ public class Console {
         }
         return input; // Return the valid input
     }
+    //endregion
 }

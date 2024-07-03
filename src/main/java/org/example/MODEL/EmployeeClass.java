@@ -3,13 +3,14 @@ package org.example.MODEL;
 import java.util.Objects;
 
 public class EmployeeClass {
-    // Instance variables
+    //region VARS
     private int id;
     private String fName;
     private String lName;
     private int hireYear;
+    //endregion
 
-    //region Getters and setters
+    //region GETTERS & SETTERS
     public int getId() {
         return id;
     }
@@ -56,14 +57,17 @@ public class EmployeeClass {
         }
     }
     //endregion
-    // Constructor
+
+    //region CONSTRUCTOR
     public EmployeeClass(int id, String fnName, String lName, int hireYear) {
         setId(id);
         setFName(fnName);
         setLName(lName);
         setHireYear(hireYear);
     }
+    //endregion
 
+    //region OVERRIDE METHODS
     /**_
      * Returns the employee data as a string.
      * @return employee data
@@ -78,8 +82,6 @@ public class EmployeeClass {
         return employeeString.toString();
     }
 
-
-
     //override methods to allow comparing file objects and prevents duplicate array employee objects from being added.
     @Override // Compares the object with the specified object for order
     public boolean equals(Object obj) {
@@ -93,4 +95,5 @@ public class EmployeeClass {
     public int hashCode() { // Returns the hash code value for the object on which this method is invoked
         return Objects.hash(getId()); // Requires import java.util.Objects;
     }
+    //endregion
 }

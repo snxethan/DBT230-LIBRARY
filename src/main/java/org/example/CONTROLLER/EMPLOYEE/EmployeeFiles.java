@@ -9,6 +9,7 @@ public class EmployeeFiles {
     static String uploadPath = "src/main/java/org/example/FILES/long"; // path to the upload folder
 
 
+    //region READ FILES
     /**
      * Reads the files from the upload folder.
      * Supported file formats: .txt, .json, .serialized.
@@ -62,7 +63,6 @@ public class EmployeeFiles {
 
     }
 
-
     /**
      * Reads the serialized file.
      * Reads the employee object and adds the employee data.
@@ -70,6 +70,7 @@ public class EmployeeFiles {
      * @param file the serialized file
      */
     public static void readSerializedFile(File file) {
+        //FIXME
         try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) { // reads the serialized file
             EmployeeClass employee = (EmployeeClass) ois.readObject(); // reads the employee object
             EmployeeDatabase.addEmployeeToArray(employee); // adds the employee data
@@ -77,7 +78,9 @@ public class EmployeeFiles {
             GUI.errorReadingFile(file.getName() + ":" + e.getMessage()); // prints out an error message
         }
     }
+    //endregion
 
+    //region WRITE FILES
     /**
      * Adds the employee data to a file.
      * Supported file formats: .txt, .json, .serialized.
@@ -132,7 +135,17 @@ public class EmployeeFiles {
             GUI.errorReadingFile(fileName + ":" + e.getMessage()); // prints out an error message
         }
     }
+    //endregion
 
+    //region DELETE FILES
+
+    /**
+     * Deletes the employee file.
+     * Supported file formats: .txt, .serialized.
+     * If the file does not exist, it will print an error message.
+     * If the file cannot be deleted, it will print an error message.
+     * @param id the employee id
+     */
     public static void deleteFile(int id) {
         String[] extensions = {".txt", ".serialized"};
         for (String extension : extensions) { // Loop through the extensions
@@ -144,9 +157,16 @@ public class EmployeeFiles {
         }
         GUI.error("Failed to delete employee file."); // Print an error message
     }
+    //endregion
 
+    //region PATH MANAGER
 
-
+    /**
+     * Initializes the upload path.
+     * Calls the method to choose the path.
+     * If the path is invalid, it will print an error message.
+     * @return the upload path
+     */
     public static void choosePath() {
         GUI.choosePath(); // Display path options to the user
         try {
@@ -169,4 +189,5 @@ public class EmployeeFiles {
             GUI.error(e.getMessage() + " [initializeUploadPath]");
         }
     }
+    //endregion
 }

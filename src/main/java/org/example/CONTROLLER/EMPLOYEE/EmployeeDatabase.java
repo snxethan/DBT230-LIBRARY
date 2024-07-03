@@ -35,20 +35,9 @@ public class EmployeeDatabase {
     }
 
 
-    /**
-     * Adds the employee data to the array list.
-     * Prints out the employee data.
-     * @param uploadedEmployee the employee object
-     */
-    public static boolean addEmployeeToArray(EmployeeClass uploadedEmployee) {
-        if(checkArray(uploadedEmployee)){ // adds the employee data
-            GUI.arrayEmployee(uploadedEmployee);
-            return true; // returns true
-        } else { // if the employee already exists
-            return false; // returns false
-        }
-    }
+    //endregion
 
+    //region ARRAY LOGIC
     /**
      * Sorts the employees by id and prints out the employee data.
      * Calls the method to sort the employees by id.
@@ -62,6 +51,13 @@ public class EmployeeDatabase {
         }
     }
 
+    /**
+     * Checks if the employee already exists in the array list.
+     * If the employee does not exist, it will add the employee to the array list.
+     * If the employee already exists, it will print an error message.
+     * @param employee the employee object
+     * @return true if the employee is added, false if the employee already exists
+     */
     public static boolean checkArray(EmployeeClass employee){
         if(employees.contains(employee)){
             //already exists
@@ -85,6 +81,46 @@ public class EmployeeDatabase {
         }
     }
 
+    /**
+     * Adds the employee data to the array list.
+     * Prints out the employee data.
+     * @param uploadedEmployee the employee object
+     */
+    public static boolean addEmployeeToArray(EmployeeClass uploadedEmployee) {
+        if(checkArray(uploadedEmployee)){ // adds the employee data
+            GUI.arrayEmployee(uploadedEmployee);
+            return true; // returns true
+        } else { // if the employee already exists
+            return false; // returns false
+        }
+    }
+
+    /**
+     * Removes the employee object from the array list.
+     * If the employee object is found, it will remove the employee object.
+     * If the employee object is not found, it will return false.
+     * @param employee the employee object
+     * @return true if the employee is removed, false if the employee is not found
+     */
+    public static boolean removeEmployeeFromArray(EmployeeClass employee) {
+        if(employees.contains(employee)) { // if the employee array list contains the employee object
+            employees.remove(employee); // removes the employee object
+            return true; // returns true
+        } else {
+            return false; // returns false
+        }
+    }
+    //endregion
+
+    //region SEARCH EMPLOYEES
+
+    /**
+     * Searches for an employee by ID.
+     * If the employee is found, it will return the employee object.
+     * If the employee is not found, it will return null.
+     * @param ID the employee id
+     * @return the employee object
+     */
     public static EmployeeClass searchEmployeeByID(int ID) {
         for (EmployeeClass employee : employees) { // for each employee in the array list
             if (employee.getId() == ID) { // if the employee id matches the search id
@@ -94,6 +130,13 @@ public class EmployeeDatabase {
         return null;
     }
 
+    /**
+     * Searches for an employee by name.
+     * If the employee is found, it will return the employee object.
+     * If the employee is not found, it will return null.
+     * @param name the employee name
+     * @return the employee object
+     */
     public static EmployeeClass searchEmployeeByName(String name) {
         for (EmployeeClass employee : employees) { // for each employee in the array list
             if (employee.getFName().equalsIgnoreCase(name) || employee.getLName().equalsIgnoreCase(name) || (employee.getFName() + " " + employee.getLName()).equalsIgnoreCase(name)) { // if the employee name matches the search name
@@ -103,6 +146,13 @@ public class EmployeeDatabase {
         return null;
     }
 
+    /**
+     * Searches for an employee by hire year.
+     * If the employee is found, it will return the employee object.
+     * If the employee is not found, it will return null.
+     * @param hireYear the employee hire year
+     * @return the employee object
+     */
     public static EmployeeClass searchEmployeeByHireYear(int hireYear) {
         for (EmployeeClass employee : employees) { // for each employee in the array list
             if (employee.getHireYear() == hireYear) { // if the employee hire year matches the search hire year
@@ -112,6 +162,11 @@ public class EmployeeDatabase {
         return null;
     }
 
+    /**
+     * Finds the next available employee id.
+     * If the employee id is greater than or equal to the next id, it will set the next id to the employee id plus 1.
+     * @return the next id
+     */
     public static int findNextID() {
         Controller.updateEmployeesFromFile();
         int nextID = 1; // sets the next id to 1
@@ -123,15 +178,11 @@ public class EmployeeDatabase {
         }
         return nextID; // returns the next id
     }
+    //endregion
 
-    public static boolean removeEmployeeFromArray(EmployeeClass employee) {
-        if(employees.contains(employee)) { // if the employee array list contains the employee object
-            employees.remove(employee); // removes the employee object
-            return true; // returns true
-        } else {
-            return false; // returns false
-        }
-    }
+
+
+
 }
 
 
