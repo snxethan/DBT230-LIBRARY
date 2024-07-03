@@ -15,7 +15,7 @@ public class EmployeeDatabase {
     /**
      * Parses the line and adds the employee data.
      * If the line does not match the pattern, it will print an error message.
-     * Calls the method to add the employee data to the array list.
+     * Call the method to add the employee data to the array list.
      * @param line the line from the text file
      */
     public static void addEmployeeFromFile(String line) {
@@ -27,26 +27,13 @@ public class EmployeeDatabase {
             String eLName = matcher.group(3); // gets the employee last name
             int eHireYear = Integer.parseInt(matcher.group(4)); // gets the employee hire year
 //            System.out.println("Employee data found in file: " + line); // prints out the employee data
-
-            addEmployeeToArray(eID, eFName, eLName, eHireYear); // adds the employee data
+            EmployeeClass employee = new EmployeeClass(eID, eFName, eLName, eHireYear);
+            addEmployeeToArray(employee); // adds the employee data
         } else {
            GUI.errorAddingEmployeeFile(); // prints out an error message
         }
     }
 
-    /**
-     * Adds the employee data to the array list.
-     * Prints out the employee data.
-     * @param eID the employee id
-     * @param eFName the employee first name
-     * @param eLName the employee last name
-     * @param eHireYear the employee hire year
-     */
-    public static boolean addEmployeeToArray(int eID, String eFName, String eLName, int eHireYear) {
-        EmployeeClass uploadedEmployee = new EmployeeClass(eID, eFName, eLName, eHireYear); // creates a new employee object
-        return checkArray(uploadedEmployee);
-//        System.out.println("Employee data added to array\n"); // prints out the employee data
-    }
 
     /**
      * Adds the employee data to the array list.
@@ -128,6 +115,7 @@ public class EmployeeDatabase {
     public static int findNextID() {
         Controller.updateEmployeesFromFile();
         int nextID = 1; // sets the next id to 1
+
         for (EmployeeClass employee : employees) { // for each employee in the array list
             if (employee.getId() >= nextID) { // if the employee id is greater than or equal to the next id
                 nextID = employee.getId() + 1; // sets the next id to the employee id plus 1

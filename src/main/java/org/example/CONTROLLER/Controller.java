@@ -7,6 +7,8 @@ import org.example.VIEW.GUI;
 
 public class Controller {
     public static void startApplication() {
+
+        EmployeeFiles.choosePath(); // calls the choose path method
         GUI.start(); // prints out the start message
         updateEmployeesFromFile(); // updates the employees from the file
         mainMenu(); // calls the main menu
@@ -220,7 +222,7 @@ public class Controller {
             GUI.error(e.getMessage() + " [deleteMenu]");
         }
     }
-    //endregion  MENU_
+    //endregion  MENU
 
     //region DELETE EMPLOYEE FUNCTIONALITY
     public static void EmployeeDelete() {
@@ -277,7 +279,6 @@ public class Controller {
     //region UPDATE EMPLOYEE FUNCTIONALITY
     public static void updateEmployeesFromFile(){
         EmployeeFiles.readFile(); // reads the file
-        EmployeeDatabase.sortEmployees(); // sorts the employees by id
     }
     public static void EmployeeUpdate() {
         try {
