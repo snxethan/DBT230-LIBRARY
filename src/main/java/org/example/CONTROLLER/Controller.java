@@ -224,9 +224,13 @@ public class Controller {
 
     //region DELETE EMPLOYEE FUNCTIONALITY
     public static void EmployeeDelete() {
-        EmployeeDatabase.displayAllEmployees();
+
         GUI.employeeSearch("[ID]");
         int id = Console.readInt(); // Ask for employee ID
+        if(id < 0) {
+            GUI.error("ID cannot be negative.");
+            return;
+        }
         EmployeeClass employee = EmployeeDatabase.searchEmployeeByID(id); // Search for employee
         if (employee != null) {
             if (EmployeeDatabase.removeEmployeeFromArray(employee)) {

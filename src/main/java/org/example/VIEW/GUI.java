@@ -5,7 +5,7 @@ import org.example.MODEL.EmployeeClass;
 public class GUI {
     //region Initialization and Error Messages
     public static void start() {
-        System.out.println("\nSimple Persistence Started ----------------- \n");
+        System.out.println("\n----- SIMPLE PERSISTENCE STARTED ----- \n");
         System.out.println("Adding Employees from file...\n");
     }
     public static void readingPath(String path){
@@ -42,7 +42,7 @@ public class GUI {
         System.out.println("Invalid input. ONLY Letters!");
     }
     public static void end() {
-        System.out.println("Simple Persistence Ended ----------------- \n");
+        System.out.println("\n ----- SIMPLE PERSISTENCE ENDED ----- \n");
     }
     public static void displayMessage(String message){
         System.out.println(message);
