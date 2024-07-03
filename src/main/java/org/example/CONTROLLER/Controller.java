@@ -7,12 +7,19 @@ import org.example.VIEW.GUI;
 
 public class Controller {
     public static void startApplication() {
-
+        ConsoleTimer.startTimer("startApplication");
         EmployeeFiles.choosePath(); // calls the choose path method
         GUI.start(); // prints out the start message
         updateEmployeesFromFile(); // updates the employees from the file
+        ConsoleTimer.stopTimer("startApplication");
         mainMenu(); // calls the main menu
+
     }
+
+    //FIXME: Update previous functionality for use both a) with and without indexing and b) with and without serialization
+            //FIXME Searching employees (by id and name)
+            //FIXME: Displaying all employee
+    //TODO: Support long, simple, hashed, and unhashed.
 
     //region MAIN MENU
     public static void mainMenu() {

@@ -3,7 +3,7 @@ package org.example.VIEW;
 import org.example.MODEL.EmployeeClass;
 
 public class GUI {
-    //region Initialization and Error Messages
+    //region INITIALIZATION & ERRORS
     public static void start() {
         System.out.println("\n----- SIMPLE PERSISTENCE STARTED ----- \n");
         System.out.println("Adding Employees from file...\n");
@@ -21,7 +21,7 @@ public class GUI {
         System.out.println("File Data Added to Database!\n");
     }
     public static void sortEmployeeDatabase(){
-        System.out.println("Employee Database Sorted by [ID]\n");
+        System.out.println("Employee Database Sorted by [ID]");
     }
     public static void emptyEmployeeDatabase(){
         System.out.println("Employee Database is Empty!\n");
@@ -148,5 +148,14 @@ public class GUI {
                  3) /long serialized""");
     }
 
+    //endregion
+
+    //region TIMER LOGIC
+    public static void timerMS(String name, long elapsed){
+        System.out.println("{" + name + " took " + elapsed + " ms}");
+    }
+    public static void timerFailed(String name){
+        System.out.println("{" + name + " could NOT be started}");
+    }
     //endregion
 }

@@ -1,5 +1,7 @@
 package org.example.CONTROLLER.EMPLOYEE;
 
+import org.example.CONTROLLER.Console;
+import org.example.CONTROLLER.ConsoleTimer;
 import org.example.CONTROLLER.Controller;
 import org.example.MODEL.EmployeeClass;
 import org.example.VIEW.GUI;
@@ -10,6 +12,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class EmployeeDatabase {
+    //TODO: Index employees
+            //TODO: Create an index (using a hashmap or dictionary or some other implementation) of employees with their ID as the key
+            //TODO: Create an index (using a hashmap or dictionary or some other implementation) of employees with their Last Name as the key
     static ArrayList<EmployeeClass> employees = new ArrayList<>(); // array list to store employee objects
 
     /**
@@ -58,19 +63,22 @@ public class EmployeeDatabase {
      * @param employee the employee object
      * @return true if the employee is added, false if the employee already exists
      */
-    public static boolean checkArray(EmployeeClass employee){
-        if(employees.contains(employee)){
-            //already exists
-//            GUI.existingEmployee(employee);
-            return false;
-        } else {
-            employees.add(employee);
-            GUI.arrayEmployee(employee);
-            return true;
+    public static boolean checkArray(EmployeeClass employee) {
+        for (EmployeeClass existingEmployee : employees) {
+            if (existingEmployee.getFName().equalsIgnoreCase(employee.getFName()) && existingEmployee.getLName().equalsIgnoreCase(employee.getLName()) || existingEmployee.getId() == employee.getId()){
+                // Employee with the same first and last name already exists
+                // GUI.existingEmployee(employee); // Uncomment this if you want to display a message
+                return false;
+            }
         }
+        // No matching employee found, add the new employee
+        employees.add(employee);
+        return true;
     }
 
-    public static void displayAllEmployees(){
+
+        public static void displayAllEmployees(){
+        ConsoleTimer.startTimer("DisplayAllEmployees");
         if(employees.isEmpty()) { // if the employee array list is empty
             GUI.emptyEmployeeDatabase();
         } else {
@@ -79,6 +87,7 @@ public class EmployeeDatabase {
                 GUI.displayEmployee(employee); // prints out the employee data
             }
         }
+        ConsoleTimer.stopTimer("DisplayAllEmployees");
     }
 
     /**
@@ -122,11 +131,14 @@ public class EmployeeDatabase {
      * @return the employee object
      */
     public static EmployeeClass searchEmployeeByID(int ID) {
+        ConsoleTimer.startTimer("SearchEmployeeByID"); // starts the timer
         for (EmployeeClass employee : employees) { // for each employee in the array list
             if (employee.getId() == ID) { // if the employee id matches the search id
+                ConsoleTimer.stopTimer("SearchEmployeeByID"); // stops the timer
                 return employee; // returns the employee object
             }
         }
+        ConsoleTimer.stopTimer("SearchEmployeeByID"); // stops
         return null;
     }
 
@@ -138,11 +150,14 @@ public class EmployeeDatabase {
      * @return the employee object
      */
     public static EmployeeClass searchEmployeeByName(String name) {
+        ConsoleTimer.startTimer("SearchEmployeeByName"); // starts the timer
         for (EmployeeClass employee : employees) { // for each employee in the array list
             if (employee.getFName().equalsIgnoreCase(name) || employee.getLName().equalsIgnoreCase(name) || (employee.getFName() + " " + employee.getLName()).equalsIgnoreCase(name)) { // if the employee name matches the search name
+                ConsoleTimer.stopTimer("SearchEmployeeByName"); // stops the timer
                 return employee; // returns the employee object
             }
         }
+        ConsoleTimer.stopTimer("SearchEmployeeByName"); // stops the timer
         return null;
     }
 
@@ -154,11 +169,14 @@ public class EmployeeDatabase {
      * @return the employee object
      */
     public static EmployeeClass searchEmployeeByHireYear(int hireYear) {
+        ConsoleTimer.startTimer("SearchEmployeeByHireYear"); // starts the timer
         for (EmployeeClass employee : employees) { // for each employee in the array list
             if (employee.getHireYear() == hireYear) { // if the employee hire year matches the search hire year
+                ConsoleTimer.stopTimer("SearchEmployeeByHireYear"); // stops the timer
                 return employee; // returns the employee object
             }
         }
+        ConsoleTimer.stopTimer("SearchEmployeeByHireYear"); // stops the timer
         return null;
     }
 
@@ -168,6 +186,7 @@ public class EmployeeDatabase {
      * @return the next id
      */
     public static int findNextID() {
+        ConsoleTimer.startTimer("FindNextID"); // starts the timer
         Controller.updateEmployeesFromFile();
         int nextID = 1; // sets the next id to 1
 
@@ -176,6 +195,7 @@ public class EmployeeDatabase {
                 nextID = employee.getId() + 1; // sets the next id to the employee id plus 1
             }
         }
+        ConsoleTimer.stopTimer("FindNextID"); // stops the timer
         return nextID; // returns the next id
     }
     //endregion

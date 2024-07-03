@@ -1,48 +1,76 @@
 package org.example.CONTROLLER.EMPLOYEE;
 
+import org.example.CONTROLLER.ConsoleTimer;
 import org.example.MODEL.EmployeeClass;
 import org.example.VIEW.GUI;
 import org.example.CONTROLLER.Console;
 import java.io.*;
 
 public class EmployeeFiles {
-    static String uploadPath = "src/main/java/org/example/FILES/long"; // path to the upload folder
+    static String uploadPath = "src/main/java/org/example/FILES/long"; // default path to the upload folder
 
+    //TODO: Serialize employees
+            //TODO: create a serialized representation of each employee from a particular directory in the respective serialized directory
 
     //region READ FILES
     /**
-     * Reads the files from the upload folder.
-     * Supported file formats: .txt, .json, .serialized.
-     * Unsupported file formats will print an error message.
-     * Calls the appropriate method to read the file based on the file format.
-     * If the file format is not supported, it will print an error message.
-     * If there are no files in the directory, it will print an error message.
-     * If the file cannot be read, it will print an error message.
+     * Reads the files from the upload path.
+     * If the directory path is invalid, it will print an error message.
+     * If no files are found in the directory, it will print an error message.
+     * Calls the method to process the file.
+     * Calls the method to sort the employees.
+     * Calls the method to stop the timer.
+     * @return the upload path
      */
     public static void readFile() {
+        ConsoleTimer.startTimer("ReadFiles");
         GUI.readingPath("'" + uploadPath + "'");
 
-        File[] uploadFileList = new File(uploadPath).listFiles(); // gets the list of files in the upload folder
+        File directory = new File(uploadPath);
+        File[] uploadFileList = directory.listFiles();
 
-        if (uploadFileList == null || uploadFileList.length == 0) { // if there are no files in the directory
+        if (uploadFileList == null) {
+            GUI.errorReadingFile("The directory path is invalid.");
+            return;
+        }
+
+        if (uploadFileList.length == 0) {
             GUI.errorReadingFile("No files found in the directory...");
             return;
         }
 
-        GUI.initializedEmployees(); // prints out the initialized employees message
+        GUI.initializedEmployees();
 
         for (File uploadedFile : uploadFileList) {
-            String fileName = uploadedFile.getName(); // gets the name of the file
-            if (fileName.endsWith(".txt")) { // if the file is a text file
-                readTextFile(uploadedFile);
-            } else if (fileName.endsWith(".ser")) { // if the file is a serialized file
-                readSerializedFile(uploadedFile);
-            } else {
-                GUI.errorReadingFile("Unsupported file format: " + fileName);   // prints out an error message
-            }
+            processFile(uploadedFile);
         }
+
         GUI.arrayEmployees();
-        EmployeeDatabase.sortEmployees(); // sorts the employees by id
+        EmployeeDatabase.sortEmployees();
+        ConsoleTimer.stopTimer("ReadFiles");
+    }
+
+    /**
+     * Processes the file.
+     * Supported file formats: .txt, .serialized.
+     * Calls the appropriate method to process the file based on the file format.
+     * If the file format is not supported, it will print an error message.
+     * If the file cannot be processed, it will print an error message.
+     * @param file the file
+     */
+    private static void processFile(File file) {
+        String fileName = file.getName();
+        try {
+            if (fileName.endsWith(".txt")) {
+                readTextFile(file);
+            } else if (fileName.endsWith(".ser")) {
+                readSerializedFile(file);
+            } else {
+                GUI.errorReadingFile("Unsupported file format: " + fileName);
+            }
+        } catch (Exception e) {
+            GUI.errorReadingFile("Error processing file " + fileName + ": " + e.getMessage());
+        }
     }
 
     /**
@@ -60,7 +88,6 @@ public class EmployeeFiles {
         } catch (IOException e) {
             GUI.errorReadingFile(file.getName() + ":" + e.getMessage()); // prints out an error message
         }
-
     }
 
     /**
@@ -89,6 +116,7 @@ public class EmployeeFiles {
      * @param employee the employee object
      */
     public static void addFile(EmployeeClass employee) {
+        ConsoleTimer.startTimer("AddFile"); // starts the timer
         GUI.addFile(); // prints out the add file message
         try {
             switch (Console.readInt()){
@@ -104,6 +132,7 @@ public class EmployeeFiles {
         } catch (Exception e) {
             GUI.error(e.getMessage() + " [addFile]"); // prints out an error message
         }
+        ConsoleTimer.stopTimer("AddFile"); // stops the timer
     }
 
     /**
@@ -112,14 +141,17 @@ public class EmployeeFiles {
      * @param employee the employee object
      */
     private static void saveAsTextFile(EmployeeClass employee) {
+        ConsoleTimer.startTimer("SaveAsTextFile");
         String fileName = uploadPath + "/" + employee.getId() + ".txt";
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName))) { // writes the employee data to the file
-            // Ensure only one space between first and last name
-            String fullName = employee.getFName().trim() + " " + employee.getLName().trim(); // gets the full name
-            writer.write(employee.getId() + ", " + fullName + ", " + employee.getHireYear()); // writes the employee data to the file
-        } catch (IOException e) { // catches any exceptions
-            GUI.errorReadingFile(fileName + ":" + e.getMessage()); // prints out an error message
+        File file = new File(fileName);
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+            String fullName = employee.getFName().trim() + " " + employee.getLName().trim();
+            writer.write(employee.getId() + ", " + employee.getFName() + ", " + employee.getLName() + ", " + employee.getHireYear());
+            GUI.displayMessage("Employee saved to file: " + fileName);
+        } catch (IOException e) {
+            GUI.errorReadingFile("Failed to save employee to file " + fileName + ": " + e.getMessage());
         }
+        ConsoleTimer.stopTimer("SaveAsTextFile");
     }
 
     /**
@@ -128,12 +160,16 @@ public class EmployeeFiles {
      * @param employee the employee object
      */
     private static void saveAsSerializedFile(EmployeeClass employee) {
-        String fileName = uploadPath + "/" +  employee.getId() + ".serialized";
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileName))) { // writes the employee object to the file
-            oos.writeObject(employee); // writes the employee object to the file
-        } catch (IOException e) { // catches any exceptions
-            GUI.errorReadingFile(fileName + ":" + e.getMessage()); // prints out an error message
+        ConsoleTimer.startTimer("SaveAsSerializedFile");
+        String fileName = uploadPath + "/" + employee.getId() + ".ser";
+        File file = new File(fileName);
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))) {
+            oos.writeObject(employee);
+            GUI.displayMessage("Employee serialized to file: " + fileName);
+        } catch (IOException e) {
+            GUI.errorReadingFile("Failed to serialize employee to file " + fileName + ": " + e.getMessage());
         }
+        ConsoleTimer.stopTimer("SaveAsSerializedFile");
     }
     //endregion
 
@@ -147,7 +183,8 @@ public class EmployeeFiles {
      * @param id the employee id
      */
     public static void deleteFile(int id) {
-        String[] extensions = {".txt", ".serialized"};
+        ConsoleTimer.startTimer("DeleteFile"); // starts the timer
+        String[] extensions = {".txt", ".ser"};
         for (String extension : extensions) { // Loop through the extensions
             File file = new File(EmployeeFiles.uploadPath + "/" + id + extension); // Create a file object
             if (file.exists() && file.delete()) { // Check if the file exists and delete it
@@ -156,6 +193,7 @@ public class EmployeeFiles {
             }
         }
         GUI.error("Failed to delete employee file."); // Print an error message
+        ConsoleTimer.stopTimer("DeleteFile"); // stops the timer
     }
     //endregion
 
