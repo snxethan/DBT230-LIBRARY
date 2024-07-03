@@ -3,27 +3,76 @@ package org.example.VIEW;
 import org.example.MODEL.EmployeeClass;
 
 public class GUI {
-
+    //region Initialization and Error Messages
     public static void start() {
         System.out.println("\nSimple Persistence Started ----------------- \n");
+        System.out.println("Adding Employees from file...\n");
+    }
+    public static void readingPath(String path){
+        System.out.println("Reading data from path... " + path);
+    }
+    public static void initializedEmployees(){
+        System.out.println("Employees Initialized from File...\n");
+    }
+    public static void arrayEmployee(EmployeeClass employee){
+        System.out.println("Employee #" + employee.getId() + " Added to Database!");
+    }
+    public static void arrayEmployees(){
+        System.out.println("File Data Added to Database!\n");
+    }
+    public static void sortEmployeeDatabase(){
+        System.out.println("Employee Database Sorted by [ID]\n");
+    }
+    public static void emptyEmployeeDatabase(){
+        System.out.println("Employee Database is Empty!\n");
+    }
+    public static void errorAddingEmployeeFile(){
+        System.out.println("Error Adding Employee from File!\n");
+    }
+    public static void errorReadingFile(String error){
+        System.out.println("Error Reading File!\n" + error);
+    }
+    public static void error(String error){
+        System.out.println("Error: " + error);
+    }
+    public static void invalidOption(){
+        System.out.println("Invalid option!");
+    }
+    public static void onlyLetters(){
+        System.out.println("Invalid input. ONLY Letters!");
     }
     public static void end() {
         System.out.println("Simple Persistence Ended ----------------- \n");
     }
+    public static void displayMessage(String message){
+        System.out.println(message);
+    }
+    //endregion
 
+    //region MENUS
     public static void mainMenuGUI() {
         System.out.println("----- SIMPLE PERSISTENCE MENU -----");
-        System.out.println(" 1. Display"
-                        + "\n 2. Add"
-                        + "\n 3. Delete"
-                        + "\n 4. Update"
-                        + "\n 5. Exit");
+        System.out.println("""
+                 1. Display\
+
+                 2. Add\
+
+                 3. Delete\
+
+                 4. Update\
+
+                 5. Exit\
+                """);
     }
     public static void displaysMenu(){
         System.out.println("----- DISPLAY MENU -----");
-        System.out.println(" 1. Display All"
-                        + "\n 2. Search"
-                        + "\n 3. Back");
+        System.out.println("""
+                 1. Display All\
+
+                 2. Search\
+
+                 3. Back\
+                """);
     }
     public static void addMenu(){
         System.out.println("----- ADD MENU -----");
@@ -37,14 +86,60 @@ public class GUI {
     }
     public static void updateMenu(){
         System.out.println("----- UPDATE MENU -----");
-        System.out.println(" 1. Update Employee"
-                        + "\n 2. Back");
+        System.out.println("""
+                 1. Update Employee\
+
+                 2. Update Database from File\
+
+                 3. Back\
+                """);
     }
+    //endregion
 
-
+    //region EMPLOYEE LOGIC
     public static void displayEmployee(EmployeeClass employee){
-        System.out.println("Employee ID: " + employee.getId()
-                        + "\nName: " + employee.getFName() + " " + employee.getLName()
-                        + "\nHire Year: " + employee.getHireYear());
+        System.out.println("#" + employee.getId()
+                        + " / \"" + employee.getFName() + " " + employee.getLName()
+                        + "\" / " + employee.getHireYear());
     }
+    public static void displayAllEmployees(){
+        System.out.println("Displaying All Employees...");
+    }
+    public static void searchMenu(){
+        System.out.println("----- SEARCH MENU -----");
+        System.out.println("""
+                 1. Search Employee by [ID]\
+
+                 2. Search Employee by [Name]\
+
+                 3. Search Employee by [Hire Year]\
+
+                 4. Back\
+                """);
+    }
+    public static void employeeSearch(String criteria){
+        System.out.println("Enter Employee " + criteria + ": ");
+    }
+
+    public static void askFirstName() {
+        System.out.println("Enter Employee's First Name: ");
+    }
+    public static void askLastName() {
+        System.out.println("Enter Employee's Last Name: ");
+    }
+    public static void askHireYear() {
+        System.out.println("Enter Employee's Hire Year: ");
+    }
+    //endregion
+
+    //region FILE LOGIC
+    public static void addFile(){
+        System.out.println("""
+                Select file format:\s
+                 1) .txt\s
+                 2) .serialized\s
+                 3) .json""");
+    }
+
+    //endregion
 }

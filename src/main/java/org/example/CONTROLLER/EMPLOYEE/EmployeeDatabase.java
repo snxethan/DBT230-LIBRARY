@@ -1,6 +1,8 @@
 package org.example.CONTROLLER.EMPLOYEE;
 
+import org.example.CONTROLLER.Controller;
 import org.example.MODEL.EmployeeClass;
+import org.example.VIEW.GUI;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -24,10 +26,11 @@ public class EmployeeDatabase {
             String eFName = matcher.group(2); // gets the employee first name
             String eLName = matcher.group(3); // gets the employee last name
             int eHireYear = Integer.parseInt(matcher.group(4)); // gets the employee hire year
-            System.out.println("Employee data found in file:" + line); // prints out the employee data
+//            System.out.println("Employee data found in file: " + line); // prints out the employee data
+
             addEmployeeToArray(eID, eFName, eLName, eHireYear); // adds the employee data
         } else {
-            System.out.println("No Employee found for line: " + line); // prints out an error message if the line does not match the pattern
+           GUI.errorAddingEmployeeFile(); // prints out an error message
         }
     }
 
@@ -39,10 +42,10 @@ public class EmployeeDatabase {
      * @param eLName the employee last name
      * @param eHireYear the employee hire year
      */
-    public static void addEmployeeToArray(int eID, String eFName, String eLName, int eHireYear) {
+    public static boolean addEmployeeToArray(int eID, String eFName, String eLName, int eHireYear) {
         EmployeeClass uploadedEmployee = new EmployeeClass(eID, eFName, eLName, eHireYear); // creates a new employee object
-        employees.add(uploadedEmployee); // adds the employee object to the employee array list
-        System.out.println("Employee data added to array\n"); // prints out the employee data
+        return checkArray(uploadedEmployee);
+//        System.out.println("Employee data added to array\n"); // prints out the employee data
     }
 
     /**
@@ -50,9 +53,13 @@ public class EmployeeDatabase {
      * Prints out the employee data.
      * @param uploadedEmployee the employee object
      */
-    public static void addEmployeeToArray(EmployeeClass uploadedEmployee) {
-        employees.add(uploadedEmployee); // adds the employee object to the employee array list
-        System.out.println("Employee data added to array\n"); // prints out the employee data
+    public static boolean addEmployeeToArray(EmployeeClass uploadedEmployee) {
+        if(checkArray(uploadedEmployee)){ // adds the employee data
+            GUI.arrayEmployee(uploadedEmployee);
+            return true; // returns true
+        } else { // if the employee already exists
+            return false; // returns false
+        }
     }
 
     /**
@@ -61,14 +68,83 @@ public class EmployeeDatabase {
      */
     public static void sortEmployees(){
         if(employees.isEmpty()) { // if the employee array list is empty
-            System.out.println("\nNO employees found in the array list!\n"); // prints out an error message
-            return;
+            GUI.emptyEmployeeDatabase();
         } else {
-            System.out.println("\nEmployee Array sorted by ID: \n");
+            GUI.sortEmployeeDatabase();
             employees.sort(Comparator.comparingInt(EmployeeClass::getId)); // sorts the employees by id
-            for (EmployeeClass employee : employees) { // prints out the employee data from employee array list
-                System.out.println(employee.toString());
+        }
+    }
+
+    public static boolean checkArray(EmployeeClass employee){
+        if(employees.contains(employee)){
+            //already exists
+//            GUI.existingEmployee(employee);
+            return false;
+        } else {
+            employees.add(employee);
+            GUI.arrayEmployee(employee);
+            return true;
+        }
+    }
+
+    public static void displayAllEmployees(){
+        if(employees.isEmpty()) { // if the employee array list is empty
+            GUI.emptyEmployeeDatabase();
+        } else {
+            GUI.displayAllEmployees();
+            for (EmployeeClass employee : employees) { // for each employee in the array list
+                GUI.displayEmployee(employee); // prints out the employee data
             }
         }
     }
+
+    public static EmployeeClass searchEmployeeByID(int ID) {
+        for (EmployeeClass employee : employees) { // for each employee in the array list
+            if (employee.getId() == ID) { // if the employee id matches the search id
+                return employee; // returns the employee object
+            }
+        }
+        return null;
+    }
+
+    public static EmployeeClass searchEmployeeByName(String name) {
+        for (EmployeeClass employee : employees) { // for each employee in the array list
+            if (employee.getFName().equalsIgnoreCase(name) || employee.getLName().equalsIgnoreCase(name) || (employee.getFName() + " " + employee.getLName()).equalsIgnoreCase(name)) { // if the employee name matches the search name
+                return employee; // returns the employee object
+            }
+        }
+        return null;
+    }
+
+    public static EmployeeClass searchEmployeeByHireYear(int hireYear) {
+        for (EmployeeClass employee : employees) { // for each employee in the array list
+            if (employee.getHireYear() == hireYear) { // if the employee hire year matches the search hire year
+                return employee; // returns the employee object
+            }
+        }
+        return null;
+    }
+
+    public static int findNextID() {
+        Controller.updateEmployeesFromFile();
+        int nextID = 1; // sets the next id to 1
+        for (EmployeeClass employee : employees) { // for each employee in the array list
+            if (employee.getId() >= nextID) { // if the employee id is greater than or equal to the next id
+                nextID = employee.getId() + 1; // sets the next id to the employee id plus 1
+            }
+        }
+        return nextID; // returns the next id
+    }
+
+    public static boolean removeEmployeeFromArray(EmployeeClass employee) {
+        if(employees.contains(employee)) { // if the employee array list contains the employee object
+            employees.remove(employee); // removes the employee object
+            return true; // returns true
+        } else {
+            return false; // returns false
+        }
+    }
 }
+
+
+
