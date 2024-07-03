@@ -77,6 +77,8 @@ public class EmployeeDatabase {
         }
         // No matching employee found, add the new employee
         employees.add(employee);
+        employeeIdMap.put(employee.getId(), employee);
+        employeeLNameMap.put(employee.getLName().toLowerCase(), employee);
         return true;
     }
 
@@ -164,7 +166,18 @@ public class EmployeeDatabase {
         ConsoleTimer.stopTimer("SearchEmployeeByName"); // stops the timer
         return null;
     }
-
+    public static EmployeeClass findEmployeeByLName(String lName) {
+        ConsoleTimer.startTimer("SearchEmployeeByLName");
+        EmployeeClass employee = employeeLNameMap.get(lName.toLowerCase());
+        ConsoleTimer.stopTimer("SearchEmployeeByLName");
+        return employee;
+    }
+    public static EmployeeClass findEmployeeByID(Integer ID) {
+        ConsoleTimer.startTimer("SearchEmployeeByLName");
+        EmployeeClass employee = employeeIdMap.get(ID);
+        ConsoleTimer.stopTimer("SearchEmployeeByLName");
+        return employee;
+    }
     /**
      * Searches for an employee by hire year.
      * If the employee is found, it will return the employee object.

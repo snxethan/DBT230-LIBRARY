@@ -134,6 +134,7 @@ public class Controller {
             GUI.employeeSearch("[ID]");
             int id = Console.readInt();
             return EmployeeDatabase.searchEmployeeByID(id);
+            //return EmployeeDatabase.findEmployeeByID(id);
         } catch (Exception e) {
             GUI.error(e.getMessage() + " [EmployeeSearchByID]");
             return null; // Return null if an error occurs
@@ -144,6 +145,7 @@ public class Controller {
             GUI.employeeSearch("[First name] &/OR [Last name]:");
             String name = Console.readString();
             return EmployeeDatabase.searchEmployeeByName(name);
+            //return EmployeeDatabase.findEmployeeByLName(name);
         } catch (Exception e) {
             GUI.error(e.getMessage() + " [EmployeeSearchByName]");
             return null;
