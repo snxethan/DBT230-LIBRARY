@@ -16,10 +16,9 @@ public class Controller {
 
     }
 
-    //FIXME: Update previous functionality for use both a) with and without indexing and b) with and without serialization
-            //FIXME Searching employees (by id and name)
-            //FIXME: Displaying all employee
-    //TODO: Support long, simple, hashed, and unhashed.
+    //FIXME: Update previous functionality for use both a) with and without serialization
+            //FIXME Searching employees (by first name)
+    //TODO: Support hashed, and unHashed.
 
     //region MAIN MENU
     public static void mainMenu() {
@@ -133,8 +132,7 @@ public class Controller {
         try {
             GUI.employeeSearch("[ID]");
             int id = Console.readInt();
-            return EmployeeDatabase.searchEmployeeByID(id);
-            //return EmployeeDatabase.findEmployeeByID(id);
+            return EmployeeDatabase.findEmployeeByID(id);
         } catch (Exception e) {
             GUI.error(e.getMessage() + " [EmployeeSearchByID]");
             return null; // Return null if an error occurs
@@ -142,10 +140,9 @@ public class Controller {
     }
     public static EmployeeClass EmployeeSearchByName(){
         try {
-            GUI.employeeSearch("[First name] &/OR [Last name]:");
+            GUI.employeeSearch("Last name:");
             String name = Console.readString();
-            return EmployeeDatabase.searchEmployeeByName(name);
-            //return EmployeeDatabase.findEmployeeByLName(name);
+            return EmployeeDatabase.findEmployeeByLName(name);
         } catch (Exception e) {
             GUI.error(e.getMessage() + " [EmployeeSearchByName]");
             return null;
