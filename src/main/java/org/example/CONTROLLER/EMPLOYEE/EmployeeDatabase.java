@@ -13,9 +13,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class EmployeeDatabase {
-    //TODO: Index employees
-            //TODO: Create an index (using a hashmap or dictionary or some other implementation) of employees with their ID as the key
-            //TODO: Create an index (using a hashmap or dictionary or some other implementation) of employees with their Last Name as the key
     static ArrayList<EmployeeClass> employees = new ArrayList<>(); // array list to store employee objects
     static HashMap<Integer , EmployeeClass> employeeIdMap = new HashMap<Integer, EmployeeClass>();
     static HashMap<String , EmployeeClass> employeeLNameMap = new HashMap<String, EmployeeClass>();

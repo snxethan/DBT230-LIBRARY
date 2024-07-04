@@ -17,7 +17,6 @@ public class Controller {
     }
 
     //FIXME: Update previous functionality for use both a) with and without serialization
-            //FIXME Searching employees (by first name)
     //TODO: Support hashed, and unHashed.
 
     //region MAIN MENU
