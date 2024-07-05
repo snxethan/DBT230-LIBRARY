@@ -144,8 +144,9 @@ public class GUI {
         System.out.println("""
                 Select file path:\s
                  1) /simple\s
-                 2) /long\s
-                 3) /long serialized""");
+                 2) /simple serialized\s
+                 3) /long\s
+                 4) /long serialized""");
     }
 
     //endregion

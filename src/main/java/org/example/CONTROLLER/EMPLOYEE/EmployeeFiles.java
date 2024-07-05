@@ -7,7 +7,7 @@ import org.example.CONTROLLER.Console;
 import java.io.*;
 
 public class EmployeeFiles {
-    static String uploadPath = "src/main/java/org/example/FILES/long"; // default path to the upload folder
+    static String uploadPath = "src/main/java/org/example/FILES/simple"; // default path to the upload folder
 
     //TODO: Serialize employees
             //TODO: create a serialized representation of each employee from a particular directory in the respective serialized directory
@@ -96,14 +96,17 @@ public class EmployeeFiles {
      * If the file cannot be read, it will print an error message.
      * @param file the serialized file
      */
-    public static void readSerializedFile(File file) {
-        //FIXME
-        try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) { // reads the serialized file
-            EmployeeClass employee = (EmployeeClass) ois.readObject(); // reads the employee object
-            EmployeeDatabase.addEmployeeToArray(employee); // adds the employee data
-        } catch (IOException | ClassNotFoundException e) { // catches any exceptions
-            GUI.errorReadingFile(file.getName() + ":" + e.getMessage()); // prints out an error message
-        }
+    public static void readSerializedFile(File file) throws IOException, ClassNotFoundException {
+        FileInputStream fileIn = new FileInputStream(file);
+        ObjectInputStream ois = new ObjectInputStream(fileIn); // reads the serialized file
+
+        EmployeeClass employee = (EmployeeClass) ois.readObject(); // reads the employee object
+
+        ois.close();//closes streams
+        fileIn.close();
+
+        EmployeeDatabase.addEmployeeToArray(employee); // adds the employee data
+
     }
     //endregion
 
@@ -159,17 +162,22 @@ public class EmployeeFiles {
      * If the file cannot be saved, it will print an error message.
      * @param employee the employee object
      */
-    private static void saveAsSerializedFile(EmployeeClass employee) {
-        ConsoleTimer.startTimer("SaveAsSerializedFile");
-        String fileName = uploadPath + "/" + employee.getId() + ".ser";
-        File file = new File(fileName);
-        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(file))) {
-            oos.writeObject(employee);
-            GUI.displayMessage("Employee serialized to file: " + fileName);
-        } catch (IOException e) {
-            GUI.errorReadingFile("Failed to serialize employee to file " + fileName + ": " + e.getMessage());
-        }
-        ConsoleTimer.stopTimer("SaveAsSerializedFile");
+    private static void saveAsSerializedFile(EmployeeClass employee) throws IOException {
+        ConsoleTimer.startTimer("SaveAsSerializedFile");//Starting timer
+
+        String fileName = uploadPath + "/" + employee.getId() + ".ser"; //setting up file name and path
+
+        FileOutputStream fileOut = new FileOutputStream(fileName);//creating the necessary streams to save the .ser file
+        ObjectOutputStream oos = new ObjectOutputStream(fileOut);
+
+        oos.writeObject(employee);//saving the new .ser file
+
+        oos.close();//Closing the streams
+        fileOut.close();
+
+        GUI.displayMessage("Employee serialized to file: " + fileName);
+
+        ConsoleTimer.stopTimer("SaveAsSerializedFile");//Stopping the timer
     }
     //endregion
 
@@ -214,9 +222,12 @@ public class EmployeeFiles {
                     uploadPath = "src/main/java/org/example/FILES/simple";
                     break;
                 case 2: // Set the upload path to the long folder
+                    uploadPath = "src/main/java/org/example/FILES/simple serialized";
+                    break;
+                case 3: // Set the upload path to the long folder
                     uploadPath = "src/main/java/org/example/FILES/long";
                     break;
-                case 3:  // Set the upload path to the long ser folder
+                case 4:  // Set the upload path to the long ser folder
                     uploadPath = "src/main/java/org/example/FILES/long serialized";
                     break;
                 default:
