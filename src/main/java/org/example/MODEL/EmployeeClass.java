@@ -1,8 +1,9 @@
 package org.example.MODEL;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class EmployeeClass {
+public class EmployeeClass implements Serializable {
     //region VARS
     private int id;
     private String fName;
