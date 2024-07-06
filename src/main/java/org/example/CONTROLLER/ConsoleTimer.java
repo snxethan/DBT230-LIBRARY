@@ -35,19 +35,19 @@ public class ConsoleTimer {
 
                 if (elapsed > 1_000){
                     elapsed /= 1_000;//milliseconds to seconds
-                    timeType = "Sec";
+                    timeType = "sec";
 
                     if (elapsed > 60){
                         elapsed /= 60;//second to minutes
-                        timeType = "Min";
+                        timeType = "min";
 
                         if (elapsed > 60){
                             elapsed /= 60;//minutes to hours
-                            timeType = "Hr";
+                            timeType = "hr";
 
                             if (elapsed > 24){
                                 elapsed /= 24;//hours to days
-                                timeType = "Days";
+                                timeType = "days";
                             }
                         }
                     }

@@ -134,10 +134,7 @@ public class GUI {
 
     //region FILE LOGIC
     public static void addFile(){
-        System.out.println("""
-                Select file format:\s
-                 1) .txt\s
-                 2) .serialized""");
+        System.out.println("Adding Employee to File...");
     }
 
     public static void choosePath() {
@@ -153,7 +150,7 @@ public class GUI {
 
     //region TIMER LOGIC
     public static void timerOut(String name, long elapsed, String timeType){
-        System.out.println("{" + name + " took " + elapsed + " " + timeType);
+        System.out.println("{" + name + " took " + elapsed + " " + timeType + "}");
     }
     public static void timerFailed(String name){
         System.out.println("{" + name + " could NOT be started}");
