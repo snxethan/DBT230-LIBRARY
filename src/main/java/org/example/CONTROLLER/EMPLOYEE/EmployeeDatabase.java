@@ -39,6 +39,21 @@ public class EmployeeDatabase {
            GUI.errorAddingEmployeeFile(); // prints out an error message
         }
     }
+    public static void addEmployeeFromFile(int d) {
+        //FIXME:
+//        Pattern pattern = Pattern.compile("(\\d+),\\s*(\\w+),\\s*(\\w+),\\s*(\\d+)"); // regex pattern to match the line
+//        Matcher matcher = pattern.matcher(d); // matches the line with the pattern
+//        if (matcher.find()) { // if the line matches the pattern
+//            int eID = Integer.parseInt(matcher.group(1)); // gets the employee id
+//            String eFName = matcher.group(2); // gets the employee first name
+//            String eLName = matcher.group(3); // gets the employee last name
+//            int eHireYear = Integer.parseInt(matcher.group(4)); // gets the employee hire year
+////            System.out.println("Employee data found in file: " + line); // prints out the employee data
+//            EmployeeClass employee = new EmployeeClass(eID, eFName, eLName, eHireYear);
+//            addEmployeeToArray(employee); // adds the employee data
+//        } else {
+//            GUI.errorAddingEmployeeFile(); // prints out an error message
+    }
 
 
     //endregion

@@ -133,17 +133,12 @@ public class GUI {
     //endregion
 
     //region FILE LOGIC
-    public static void addFile(){
-        System.out.println("Adding Employee to File...");
-    }
 
     public static void choosePath() {
         System.out.println("""
                 Select file path:\s
-                 1) /simple\s
-                 2) /simple serialized\s
-                 3) /long\s
-                 4) /long serialized""");
+                 1) /long\s
+                 2) /long serialized""");
     }
 
     //endregion

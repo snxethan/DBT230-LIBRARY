@@ -8,9 +8,11 @@ import java.io.*;
 
 public class EmployeeFiles {
     static String uploadPath = "src/main/java/org/example/FILES/simple"; // default path to the upload folder
+    static String longPath = "src/main/java/org/example/FILES/simple"; // default path to the upload folder
+    static String serPath = "src/main/java/org/example/FILES/simple serialized"; // default path to the upload folder
 
-    //TODO: Serialize employees
-            //TODO: create a serialized representation of each employee from a particular directory in the respective serialized directory
+    //FIXME: change simple paths to long
+    //FIXME read serialized file
 
     //region READ FILES
     /**
@@ -97,16 +99,30 @@ public class EmployeeFiles {
      * @param file the serialized file
      */
     public static void readSerializedFile(File file) throws IOException, ClassNotFoundException {
-        FileInputStream fileIn = new FileInputStream(file);
-        ObjectInputStream ois = new ObjectInputStream(fileIn); // reads the serialized file
+        try (FileInputStream fileIn = new FileInputStream(file);
+             CustomObjectInputStream ois = new CustomObjectInputStream(fileIn)) {
 
-        EmployeeClass employee = (EmployeeClass) ois.readObject(); // reads the employee object
+            EmployeeClass employee = (EmployeeClass) ois.readObject(); // reads the employee object
+            System.out.println(employee);
 
-        ois.close();//closes streams
-        fileIn.close();
+            EmployeeDatabase.addEmployeeToArray(employee); // adds the employee data
+        }
+    }
 
-        EmployeeDatabase.addEmployeeToArray(employee); // adds the employee data
+    private static class CustomObjectInputStream extends ObjectInputStream {
 
+        public CustomObjectInputStream(InputStream in) throws IOException {
+            super(in);
+        }
+
+        @Override
+        protected ObjectStreamClass readClassDescriptor() throws IOException, ClassNotFoundException {
+            ObjectStreamClass desc = super.readClassDescriptor();
+            if (desc.getName().equals("edu.neumont.dbt230.Employee")) {
+                return ObjectStreamClass.lookup(EmployeeClass.class);
+            }
+            return desc;
+        }
     }
     //endregion
 
@@ -120,20 +136,11 @@ public class EmployeeFiles {
      */
     public static void addFile(EmployeeClass employee) {
         ConsoleTimer.startTimer("AddFile"); // starts the timer
-        GUI.addFile(); // prints out the add file message
         try {
-            switch (Console.readInt()){
-                case 1:
-                    saveAsTextFile(employee); // saves the employee data to a text file
-                    break;
-                case 2:
-                    saveAsSerializedFile(employee); // saves the employee data to a serialized file
-                    break;
-                default:
-                    GUI.error("Invalid option!"); // prints out an error message
-            }
-        } catch (Exception e) {
-            GUI.error(e.getMessage() + " [addFile]"); // prints out an error message
+            saveAsTextFile(employee); // saves the employee data to a text file
+            saveAsSerializedFile(employee); // save the employee data to a .ser file
+        }catch (Exception e){
+            System.out.println(e.getMessage());
         }
         ConsoleTimer.stopTimer("AddFile"); // stops the timer
     }
@@ -145,7 +152,7 @@ public class EmployeeFiles {
      */
     private static void saveAsTextFile(EmployeeClass employee) {
         ConsoleTimer.startTimer("SaveAsTextFile");
-        String fileName = uploadPath + "/" + employee.getId() + ".txt";
+        String fileName = longPath + "/" + employee.getId() + ".txt";
         File file = new File(fileName);
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             String fullName = employee.getFName().trim() + " " + employee.getLName().trim();
@@ -165,7 +172,7 @@ public class EmployeeFiles {
     private static void saveAsSerializedFile(EmployeeClass employee) throws IOException {
         ConsoleTimer.startTimer("SaveAsSerializedFile");//Starting timer
 
-        String fileName = uploadPath + "/" + employee.getId() + ".ser"; //setting up file name and path
+        String fileName = serPath + "/" + employee.getId() + ".ser"; //setting up file name and path
 
         FileOutputStream fileOut = new FileOutputStream(fileName);//creating the necessary streams to save the .ser file
         ObjectOutputStream oos = new ObjectOutputStream(fileOut);
@@ -192,15 +199,16 @@ public class EmployeeFiles {
      */
     public static void deleteFile(int id) {
         ConsoleTimer.startTimer("DeleteFile"); // starts the timer
-        String[] extensions = {".txt", ".ser"};
-        for (String extension : extensions) { // Loop through the extensions
-            File file = new File(EmployeeFiles.uploadPath + "/" + id + extension); // Create a file object
-            if (file.exists() && file.delete()) { // Check if the file exists and delete it
-                GUI.displayMessage("Deleted file: '" + file.getName() + "'"); // Print a success message
-                return; // Exit the method
-            }
+        File file = new File(longPath + "/" + id + ".txt"); // Create a file object
+        if (file.exists() && file.delete()) { // Check if the file exists and delete it
+            GUI.displayMessage("Deleted file: '" + file.getName() + "'"); // Print a success message
         }
-        GUI.error("Failed to delete employee file."); // Print an error message
+        File fileSer = new File(serPath + "/" + id + ".ser"); // Create a ser file object
+        if (fileSer.exists() && fileSer.delete()) { // Check if the file exists and delete it
+            GUI.displayMessage("Deleted file: '" + file.getName() + "'"); // Print a success message
+
+        }
+
         ConsoleTimer.stopTimer("DeleteFile"); // stops the timer
     }
     //endregion
@@ -218,17 +226,11 @@ public class EmployeeFiles {
         try {
             int choice = Console.readInt(); // Get user input
             switch (choice) {
-                case 1: // Set the upload path to the short folder
-                    uploadPath = "src/main/java/org/example/FILES/simple";
+                case 1: // Set the upload path to the long folder
+                    uploadPath = longPath;
                     break;
-                case 2: // Set the upload path to the long folder
-                    uploadPath = "src/main/java/org/example/FILES/simple serialized";
-                    break;
-                case 3: // Set the upload path to the long folder
-                    uploadPath = "src/main/java/org/example/FILES/long";
-                    break;
-                case 4:  // Set the upload path to the long ser folder
-                    uploadPath = "src/main/java/org/example/FILES/long serialized";
+                case 2:  // Set the upload path to the long ser folder
+                    uploadPath = serPath;
                     break;
                 default:
                     GUI.error("Invalid option!"); // Print an error message

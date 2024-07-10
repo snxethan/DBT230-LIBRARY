@@ -5,9 +5,10 @@ import java.util.Objects;
 
 public class EmployeeClass implements Serializable {
     //region VARS
+    private static final long serialVersionUID = 5814635088039616293L;
     private int id;
-    private String fName;
-    private String lName;
+    private String firstName;
+    private String lastName;
     private int hireYear;
     //endregion
 
@@ -24,24 +25,24 @@ public class EmployeeClass implements Serializable {
     }
 
     public String getFName() {
-        return fName;
+        return firstName;
     }
     public void setFName(String fName) {
         if(fName == null || fName.isEmpty()) {
             throw new IllegalArgumentException("First name cannot be empty");
         } else {
-            this.fName = fName;
+            this.firstName = fName;
         }
     }
 
     public String getLName() {
-        return lName;
+        return lastName;
     }
     public void setLName(String lName) {
         if(lName == null || lName.isEmpty()) {
             throw new IllegalArgumentException("Last name cannot be empty");
         } else {
-            this.lName = lName;
+            this.lastName = lName;
         }
     }
 
@@ -78,7 +79,7 @@ public class EmployeeClass implements Serializable {
         //return employee data as string builder
         StringBuilder employeeString = new StringBuilder();
         employeeString.append("Employee ID: ").append(id).append("\n");
-        employeeString.append("Name: ").append(fName).append(" ").append(lName).append("\n");
+        employeeString.append("Name: ").append(firstName).append(" ").append(lastName).append("\n");
         employeeString.append("Hire year: ").append(hireYear).append("\n");
         return employeeString.toString();
     }

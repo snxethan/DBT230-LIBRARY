@@ -232,7 +232,6 @@ public class Controller {
 
     //region DELETE EMPLOYEE FUNCTIONALITY
     public static void EmployeeDelete() {
-
         GUI.employeeSearch("[ID]");
         int id = Console.readInt(); // Ask for employee ID
         if(id < 0) {
@@ -242,6 +241,7 @@ public class Controller {
         EmployeeClass employee = EmployeeDatabase.searchEmployeeByID(id); // Search for employee
         if (employee != null) {
             if (EmployeeDatabase.removeEmployeeFromArray(employee)) {
+                GUI.displayAllEmployees();
                 EmployeeFiles.deleteFile(employee.getId()); // Delete file
                 GUI.displayMessage("Employee & file successfully deleted."); // Success message
             } else {
