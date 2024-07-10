@@ -1,6 +1,5 @@
 package org.example.CONTROLLER.EMPLOYEE;
 
-import org.example.CONTROLLER.Console;
 import org.example.CONTROLLER.ConsoleTimer;
 import org.example.CONTROLLER.Controller;
 import org.example.MODEL.EmployeeClass;
@@ -13,9 +12,14 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class EmployeeDatabase {
+
+    //region EMPLOYEE DATABASE (Array & HashMaps)
     static ArrayList<EmployeeClass> employees = new ArrayList<>(); // array list to store employee objects
-    static HashMap<Integer , EmployeeClass> employeeIdMap = new HashMap<Integer, EmployeeClass>();
-    static HashMap<String , EmployeeClass> employeeLNameMap = new HashMap<String, EmployeeClass>();
+    static HashMap<Integer, EmployeeClass> employeeIdMap = new HashMap<>();
+    static HashMap<String, ArrayList<EmployeeClass>> employeeLNameMap = new HashMap<>();
+    static HashMap<String, ArrayList<EmployeeClass>> employeeFNameMap = new HashMap<>();
+    static HashMap<Integer, EmployeeClass> employeeHireYearMap = new HashMap<>();
+    //endregion
 
     //region ADD EMPLOYEES
     /*
@@ -24,7 +28,7 @@ public class EmployeeDatabase {
      * Call the method to add the employee data to the array list.
      * @param line the line from the text file
      */
-    public static void addEmployeeFromFile(String line) {
+    public static EmployeeClass addEmployeeFromFile(String line) {
         Pattern pattern = Pattern.compile("(\\d+),\\s*(\\w+),\\s*(\\w+),\\s*(\\d+)"); // regex pattern to match the line
         Matcher matcher = pattern.matcher(line); // matches the line with the pattern
         if (matcher.find()) { // if the line matches the pattern
@@ -35,27 +39,15 @@ public class EmployeeDatabase {
 //            System.out.println("Employee data found in file: " + line); // prints out the employee data
             EmployeeClass employee = new EmployeeClass(eID, eFName, eLName, eHireYear);
             addEmployeeToArray(employee); // adds the employee data
+            return employee;
         } else {
-           GUI.errorAddingEmployeeFile(); // prints out an error message
+            GUI.errorAddingEmployeeFile(); // prints out an error message
+            return null;
         }
     }
-    public static void addEmployeeFromFile(int d) {
-        //FIXME:
-//        Pattern pattern = Pattern.compile("(\\d+),\\s*(\\w+),\\s*(\\w+),\\s*(\\d+)"); // regex pattern to match the line
-//        Matcher matcher = pattern.matcher(d); // matches the line with the pattern
-//        if (matcher.find()) { // if the line matches the pattern
-//            int eID = Integer.parseInt(matcher.group(1)); // gets the employee id
-//            String eFName = matcher.group(2); // gets the employee first name
-//            String eLName = matcher.group(3); // gets the employee last name
-//            int eHireYear = Integer.parseInt(matcher.group(4)); // gets the employee hire year
-////            System.out.println("Employee data found in file: " + line); // prints out the employee data
-//            EmployeeClass employee = new EmployeeClass(eID, eFName, eLName, eHireYear);
-//            addEmployeeToArray(employee); // adds the employee data
-//        } else {
-//            GUI.errorAddingEmployeeFile(); // prints out an error message
+    public static void addEmployeeFromFile(EmployeeClass employee) {
+        addEmployeeToArray(employee); // adds the employee data
     }
-
-
     //endregion
 
     //region ARRAY LOGIC
@@ -82,20 +74,26 @@ public class EmployeeDatabase {
     public static boolean checkArray(EmployeeClass employee) {
         for (EmployeeClass existingEmployee : employees) {
             if (existingEmployee.getFName().equalsIgnoreCase(employee.getFName()) && existingEmployee.getLName().equalsIgnoreCase(employee.getLName()) || existingEmployee.getId() == employee.getId()){
-                // Employee with the same first and last name already exists
-                // GUI.existingEmployee(employee); // Uncomment this if you want to display a message
                 return false;
             }
         }
-        // No matching employee found, add the new employee
         employees.add(employee);
         employeeIdMap.put(employee.getId(), employee);
-        employeeLNameMap.put(employee.getLName().toLowerCase(), employee);
+        String lowerCaseLName = employee.getLName().toLowerCase();
+        employeeLNameMap.putIfAbsent(lowerCaseLName, new ArrayList<>());
+        employeeLNameMap.get(lowerCaseLName).add(employee);
+        String lowerCaseFName = employee.getFName().toLowerCase();
+        employeeFNameMap.putIfAbsent(lowerCaseFName, new ArrayList<>());
+        employeeFNameMap.get(lowerCaseFName).add(employee);
+        employeeHireYearMap.put(employee.getHireYear(), employee);
         return true;
     }
 
-
-        public static void displayAllEmployees(){
+    /**
+     * Displays all the employees in the array list.
+     * If the employee array list is empty, it will print an error message.
+     */
+    public static void displayAllEmployees(){
         ConsoleTimer.startTimer("DisplayAllEmployees");
         if(employees.isEmpty()) { // if the employee array list is empty
             GUI.emptyEmployeeDatabase();
@@ -148,48 +146,81 @@ public class EmployeeDatabase {
      * @param ID the employee id
      * @return the employee object
      */
-    public static EmployeeClass searchEmployeeByID(int ID) {
-        ConsoleTimer.startTimer("SearchEmployeeByID"); // starts the timer
-        for (EmployeeClass employee : employees) { // for each employee in the array list
-            if (employee.getId() == ID) { // if the employee id matches the search id
-                ConsoleTimer.stopTimer("SearchEmployeeByID"); // stops the timer
-                return employee; // returns the employee object
-            }
-        }
-        ConsoleTimer.stopTimer("SearchEmployeeByID"); // stops
-        return null;
+    public static EmployeeClass findEmployeeByID(int ID) {
+        ConsoleTimer.startTimer("SearchEmployeeByLName");
+        EmployeeClass employee = employeeIdMap.get(ID);
+        ConsoleTimer.stopTimer("SearchEmployeeByLName");
+        return employee;
     }
 
     /**
      * Searches for an employee by name.
      * If the employee is found, it will return the employee object.
      * If the employee is not found, it will return null.
-     * @param name the employee name
+     * @param fname the employee name
      * @return the employee object
      */
-    public static EmployeeClass searchEmployeeByName(String name) {
+    public static EmployeeClass findEmployeeByFName(String fname) {
         ConsoleTimer.startTimer("SearchEmployeeByName"); // starts the timer
-        for (EmployeeClass employee : employees) { // for each employee in the array list
-            if (employee.getFName().equalsIgnoreCase(name) || employee.getLName().equalsIgnoreCase(name) || (employee.getFName() + " " + employee.getLName()).equalsIgnoreCase(name)) { // if the employee name matches the search name
-                ConsoleTimer.stopTimer("SearchEmployeeByName"); // stops the timer
-                return employee; // returns the employee object
-            }
-        }
+        EmployeeClass employee = employeeFNameMap.get(fname.toLowerCase()).getFirst(); // Assuming you want the first match
         ConsoleTimer.stopTimer("SearchEmployeeByName"); // stops the timer
-        return null;
+        return employee;
     }
+
+    /**
+     * Searches for an employee by last name.
+     * If the employee is found, it will return the employee object.
+     * If the employee is not found, it will return null.
+     * @param lName the employee last name
+     * @return the employee object
+     */
     public static EmployeeClass findEmployeeByLName(String lName) {
         ConsoleTimer.startTimer("SearchEmployeeByLName");
-        EmployeeClass employee = employeeLNameMap.get(lName.toLowerCase());
+        EmployeeClass employee = employeeLNameMap.get(lName.toLowerCase()).getFirst(); // Assuming you want the first match
         ConsoleTimer.stopTimer("SearchEmployeeByLName");
         return employee;
     }
-    public static EmployeeClass findEmployeeByID(Integer ID) {
-        ConsoleTimer.startTimer("SearchEmployeeByLName");
-        EmployeeClass employee = employeeIdMap.get(ID);
-        ConsoleTimer.stopTimer("SearchEmployeeByLName");
-        return employee;
+
+    /**
+     * Searches for all employees with the given first name.
+     * If the employee is found, it will return the employee object.
+     * If the employee is not found, it will return null.
+     * @param fName the employee first name
+     * @return the employee object
+     */
+    public static ArrayList<EmployeeClass> searchAllEmployeesFName(String fName) {
+        ArrayList<EmployeeClass> employeeList = new ArrayList<>();
+        String lowerCaseFName = fName.toLowerCase();
+
+        // Search by first name
+        if (employeeFNameMap.containsKey(lowerCaseFName)) {
+            employeeList.addAll(employeeFNameMap.get(lowerCaseFName));
+        }
+        employeeList.sort(Comparator.comparingInt(EmployeeClass::getId));
+        GUI.totalEmployeesFound(employeeList.size());
+        return employeeList;
     }
+
+    /**
+     * Searches for all employees with the given last name.
+     * If the employee is found, it will return the employee object.
+     * If the employee is not found, it will return null.
+     * @param lName the employee last name
+     * @return the employee object
+     */
+    public static ArrayList<EmployeeClass> searchAllEmployeesLName(String lName) {
+        ArrayList<EmployeeClass> employeeList = new ArrayList<>();
+        String lowerCaseLName = lName.toLowerCase();
+
+        // Search by last name
+        if (employeeLNameMap.containsKey(lowerCaseLName)) {
+            employeeList.addAll(employeeLNameMap.get(lowerCaseLName));
+        }
+        employeeList.sort(Comparator.comparingInt(EmployeeClass::getId));
+        System.out.println("Found employees: " + employeeList.size()); // Debug statement
+        return employeeList;
+    }
+
     /**
      * Searches for an employee by hire year.
      * If the employee is found, it will return the employee object.
@@ -199,14 +230,9 @@ public class EmployeeDatabase {
      */
     public static EmployeeClass searchEmployeeByHireYear(int hireYear) {
         ConsoleTimer.startTimer("SearchEmployeeByHireYear"); // starts the timer
-        for (EmployeeClass employee : employees) { // for each employee in the array list
-            if (employee.getHireYear() == hireYear) { // if the employee hire year matches the search hire year
-                ConsoleTimer.stopTimer("SearchEmployeeByHireYear"); // stops the timer
-                return employee; // returns the employee object
-            }
-        }
+        EmployeeClass employee = employeeHireYearMap.get(hireYear);
         ConsoleTimer.stopTimer("SearchEmployeeByHireYear"); // stops the timer
-        return null;
+        return employee;
     }
 
     /**
@@ -231,16 +257,8 @@ public class EmployeeDatabase {
                 break;
             }
         }
-
         ConsoleTimer.stopTimer("FindNextID");
         return nextID; // Returns the smallest missing ID or the next ID after the highest current ID
     }
     //endregion
-
-
-
-
 }
-
-
-

@@ -2,7 +2,10 @@ package org.example.VIEW;
 
 import org.example.MODEL.EmployeeClass;
 
+import java.util.List;
+
 public class GUI {
+
     //region INITIALIZATION & ERRORS
     public static void start() {
         System.out.println("\n----- SIMPLE PERSISTENCE STARTED ----- \n");
@@ -42,7 +45,7 @@ public class GUI {
         System.out.println("Invalid input. ONLY Letters!");
     }
     public static void end() {
-        System.out.println("\n ----- SIMPLE PERSISTENCE ENDED ----- \n");
+        System.out.println("\n----- SIMPLE PERSISTENCE ENDED ----- \n");
     }
     public static void displayMessage(String message){
         System.out.println(message);
@@ -51,7 +54,7 @@ public class GUI {
 
     //region MENUS
     public static void mainMenuGUI() {
-        System.out.println("----- SIMPLE PERSISTENCE MENU -----");
+        System.out.println(" ----- SIMPLE PERSISTENCE MENU -----");
         System.out.println("""
                  1. Display\
 
@@ -65,7 +68,7 @@ public class GUI {
                 """);
     }
     public static void displaysMenu(){
-        System.out.println("----- DISPLAY MENU -----");
+        System.out.println(" ----- DISPLAY MENU -----");
         System.out.println("""
                  1. Display All\
 
@@ -75,17 +78,17 @@ public class GUI {
                 """);
     }
     public static void addMenu(){
-        System.out.println("----- ADD MENU -----");
+        System.out.println("- ---- ADD MENU -----");
         System.out.println(" 1. Add Employee"
                         + "\n 2. Back");
     }
     public static void deleteMenu(){
-        System.out.println("----- DELETE MENU -----");
+        System.out.println(" ----- DELETE MENU -----");
         System.out.println(" 1. Delete Employee"
                         + "\n 2. Back");
     }
     public static void updateMenu(){
-        System.out.println("----- UPDATE MENU -----");
+        System.out.println(" ----- UPDATE MENU -----");
         System.out.println("""
                  1. Update Employee\
 
@@ -102,11 +105,21 @@ public class GUI {
                         + " / \"" + employee.getFName() + " " + employee.getLName()
                         + "\" / " + employee.getHireYear());
     }
+    public static void displayEmployees(List<EmployeeClass> employees) {
+        if (employees.isEmpty()) {
+            System.out.println("No employees found.");
+        } else {
+            for (EmployeeClass employee : employees) {
+                displayEmployee(employee);
+            }
+        }
+    }
+
     public static void displayAllEmployees(){
         System.out.println("Displaying All Employees...");
     }
     public static void searchMenu(){
-        System.out.println("----- SEARCH MENU -----");
+        System.out.println(" ----- SEARCH MENU -----");
         System.out.println("""
                  1. Search Employee by [ID]\
 
@@ -120,12 +133,36 @@ public class GUI {
     public static void employeeSearch(String criteria){
         System.out.println("\nEnter Employee " + criteria + ": ");
     }
+    public static void totalEmployeesFound(int total){
+        System.out.println("TOTAL Employees: " + total); // Debug statement
+    }
 
+    public static void askName(){
+        System.out.println("""
+                Select Employee Name:\s
+                 1) First Name\s
+                 2) Last Name\s
+                 3) Back\s""");
+    }
     public static void askFirstName() {
         System.out.println("\nEnter Employee's First Name: ");
     }
     public static void askLastName() {
         System.out.println("\nEnter Employee's Last Name: ");
+    }
+    public static void askFirstNameSearch(){
+        System.out.println("""
+                Select Employee First Name:\s
+                 1) Search by First Name\s
+                 2) Search by ALL First Names\s
+                 3) Back""");
+    }
+    public static void askLastNameSearch(){
+        System.out.println("""
+                Select Employee Last Name:\s
+                 1) Search by Last Name\s
+                 2) Search by ALL Last Names\s
+                 3) Back""");
     }
     public static void askHireYear() {
         System.out.println("\nEnter Employee's Hire Year: ");

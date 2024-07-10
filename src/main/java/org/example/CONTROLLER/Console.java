@@ -21,13 +21,13 @@ public class Console {
         boolean valid = false; // Flag to continue the loop
         while (!valid) { // Loop to read the input
             try { // Try to parse the input
-                String line = reader.readLine(); // Assuming Controller.reader is accessible and initialized
+                String line = reader.readLine();
                 input = Integer.parseInt(line); // Parse the input
                 valid = true; // Input was successfully parsed
             } catch (NumberFormatException e) {
                 GUI.error("Invalid input. Please enter a number."); // Print an error message
             } catch (IOException e) {
-                GUI.error(e.getMessage() + " [readInt]"); // Print an error message
+                GUI.error("Error reading input: " + e.getMessage()); // Print an error message
             }
         }
         return input; // Return the parsed input
@@ -47,10 +47,10 @@ public class Console {
                 if(input.matches("^[a-zA-Z]+$")) { // Check if input matches the regex
                     valid = true; // Input is valid
                 } else {
-                   GUI.onlyLetters(); // Prompt for valid input
+                    GUI.onlyLetters(); // Prompt for valid input
                 }
             } catch (IOException e) {
-                GUI.error(e.getMessage() + " [readString]"); // Print an error message
+                GUI.error("Error reading input: " + e.getMessage()); // Print an error message
             }
         }
         return input; // Return the valid input

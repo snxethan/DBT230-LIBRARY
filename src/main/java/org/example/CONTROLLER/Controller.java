@@ -5,21 +5,35 @@ import org.example.CONTROLLER.EMPLOYEE.EmployeeFiles;
 import org.example.MODEL.EmployeeClass;
 import org.example.VIEW.GUI;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Controller {
+
+    //region START ENTIRE APPLICATION
+    /**
+     * Starts the application.
+     * Calls the method to choose the path.
+     * Calls the method to start the GUI.
+     * Calls the method to update the employees from the file.
+     */
     public static void startApplication() {
-        ConsoleTimer.startTimer("startApplication");
+        ConsoleTimer.startTimer("startApplication"); // Start the timer
         EmployeeFiles.choosePath(); // calls the choose path method
         GUI.start(); // prints out the start message
         updateEmployeesFromFile(); // updates the employees from the file
-        ConsoleTimer.stopTimer("startApplication");
+        EmployeeFiles.syncFiles(); // calls the sync files method
+        ConsoleTimer.stopTimer("startApplication"); // stops the timer
         mainMenu(); // calls the main menu
-
     }
-
-    //FIXME: Update previous functionality for use both a) with and without serialization
-    //TODO: Support hashed, and unHashed.
+    //endregion
 
     //region MAIN MENU
+    /**
+     * Displays the main menu.
+     * Calls the method to display the main menu GUI.
+     * Displays search, add, delete, update, and exit options.
+     */
     public static void mainMenu() {
         try {
             while (true) {
@@ -38,11 +52,12 @@ public class Controller {
                         updateMenu(); // calls the update menu
                         break;
                     case 5: // EXIT Employee
+                        EmployeeFiles.syncFiles();
                         GUI.end(); // prints out the end message
                         System.exit(0); // exits the application
                         break;
                     default:
-                        GUI.invalidOption();
+                        GUI.invalidOption(); // prints out an error message
                         break;
                 }
             }
@@ -51,14 +66,20 @@ public class Controller {
         }
 
     }
-
     //endregion
 
     //region DISPLAY EMPLOYEE MENU
+    /**
+     * Displays ALL employees.
+     */
     public static void EmployeeDisplayALL() {
         EmployeeDatabase.displayAllEmployees();
     }
 
+    /**
+     * Displays the search/display menu.
+     * Display ALL Employees, Search for Specific or all First & Last Names, Hire Year, ID.
+     */
     public static void displayMenu() {
         try {
             boolean continueDisplayMenu = true; // Flag to continue the loop
@@ -69,18 +90,18 @@ public class Controller {
                         EmployeeDisplayALL();
                         break;
                     case 2: // SEARCH EMPLOYEES
-                        EmployeeClass foundEmployee = searchMenu();
-                        if (foundEmployee != null) {
-                            GUI.displayEmployee(foundEmployee);
+                        List<EmployeeClass> foundEmployees = searchMenu(); // Search for employees
+                        if (!foundEmployees.isEmpty()) { // Check if employees were found
+                            GUI.displayEmployees(foundEmployees); // Display the found employees
                         } else {
-                            GUI.displayMessage("Employee not found.");
+                            GUI.displayMessage("Employee not found."); // Error message
                         }
                         break;
                     case 3: // EXIT TO MAIN MENU
                         continueDisplayMenu = false; // Set flag too false to exit loop
                         break;
                     default:
-                        GUI.invalidOption();
+                        GUI.invalidOption(); // prints out an error message
                         break;
                 }
             }
@@ -88,85 +109,164 @@ public class Controller {
             GUI.error(e.getMessage() + " [displayMenu]");
         }
     }
-
     //endregion
 
     //region SEARCH FUNCTIONALITY
-
-    public static EmployeeClass searchMenu() {
-        EmployeeClass foundEmployee = null;
+    /**
+     * Displays the search menu.
+     * Search by ID, Name, Hire Year, or Exit to Main Menu.
+     * Calls the search methods based on the user input.
+     * @return the list of found employees
+     */
+    public static List<EmployeeClass> searchMenu() {
+        List<EmployeeClass> foundEmployees = new ArrayList<>(); // List to store found employees
         try {
-            boolean continueSearchMenu = true;
-            while (continueSearchMenu) {
-                GUI.searchMenu();
-                int choice = Console.readInt();
-                switch (choice) {
+            boolean continueSearchMenu = true; // Flag to continue the loop
+            while (continueSearchMenu) { // Loop to display the menu
+                GUI.searchMenu(); // prints out the search menu
+                int choice = Console.readInt(); // reads the user input
+                switch (choice) { // Switch statement to display the menu
                     case 1: // Search by ID
-                        foundEmployee = EmployeeSearchByID();
+                        EmployeeClass employeeByID = EmployeeSearchByID(); // Search for employee by ID
+                        if (employeeByID != null) { // Check if employee was found
+                            foundEmployees.add(employeeByID); // Add employee to the list
+                        }
                         break;
                     case 2: // Search by Name
-                        foundEmployee = EmployeeSearchByName();
+                        foundEmployees = EmployeeSearchByName(); // Search for employee by name
                         break;
                     case 3: // Search by Hire Year
-                        foundEmployee = EmployeeSearchByHireYear();
+                        EmployeeClass employeeByHireYear = EmployeeSearchByHireYear(); // Search for employee by hire year
+                        if (employeeByHireYear != null) { // Check if employee was found
+                            foundEmployees.add(employeeByHireYear); // Add employee to the list
+                        }
                         break;
                     case 4: // EXIT TO MAIN MENU
-                        continueSearchMenu = false;
+                        continueSearchMenu = false; // Set flag too false to exit loop
                         break;
                     default:
-                        GUI.invalidOption();
+                        GUI.invalidOption(); // prints out an error message
                         break;
                 }
                 if (choice >= 1 && choice <= 3) {
-                    // Removed the display message from here to avoid duplication
                     continueSearchMenu = false; // Assuming you want to exit after a search
                 }
             }
         } catch (Exception e) {
-            GUI.error(e.getMessage() + " [searchMenu]");
+            GUI.error(e.getMessage() + " [searchMenu]"); // prints out an error message
         }
-        return foundEmployee; // This return is not used currently but could be useful for future extensions.
+        return foundEmployees;
     }
+
+    /**
+     * Search for an employee by ID.
+     * @return the employee object
+     */
     public static EmployeeClass EmployeeSearchByID() {
         try {
-            GUI.employeeSearch("[ID]");
-            int id = Console.readInt();
-            return EmployeeDatabase.findEmployeeByID(id);
+            GUI.employeeSearch("[ID]"); // Ask for employee ID
+            int id = Console.readInt(); // Ask for employee ID
+            return EmployeeDatabase.findEmployeeByID(id); // Search for employee by ID
         } catch (Exception e) {
-            GUI.error(e.getMessage() + " [EmployeeSearchByID]");
+            GUI.error(e.getMessage() + " [EmployeeSearchByID]"); // prints out an error message
             return null; // Return null if an error occurs
         }
     }
-    public static EmployeeClass EmployeeSearchByName(){
+
+    /**
+     * Search for an employee by name.
+     * Search by first & last name, ALL first & last names, or exit to display menu.
+     * @return the list of found employees
+     */
+    public static List<EmployeeClass> EmployeeSearchByName() {
+        List<EmployeeClass> foundEmployees = new ArrayList<>(); // List to store found employees
         try {
-            GUI.employeeSearch("Last name:");
-            String name = Console.readString();
-            return EmployeeDatabase.findEmployeeByLName(name);
+            GUI.askName(); // Ask for name
+            switch (Console.readInt()) {
+                case 1:
+                    GUI.askFirstNameSearch(); // Ask for first name
+                    switch (Console.readInt()) {
+                        case 1:
+                            GUI.employeeSearch("First name:"); // Ask for first name
+                            String fname = Console.readString(); // Read the input
+                            EmployeeClass employee = EmployeeDatabase.findEmployeeByFName(fname); // Search for employee by first name
+                            if (employee != null) {  // Check if employee was found
+                                foundEmployees.add(employee); // Add employee to the list
+                            }
+                            break;
+                        case 2:
+                            GUI.employeeSearch("{ALL} First name:"); // Ask for all first names
+                            String fnameAll = Console.readString(); // Read the input
+                            foundEmployees = EmployeeDatabase.searchAllEmployeesFName(fnameAll); // Search for all employees by first name
+                            break;
+                        case 3: // Back option
+                            break;
+                        default:
+                            GUI.invalidOption(); // prints out an error message
+                            break;
+                    }
+                    break;
+                case 2:
+                    GUI.askLastNameSearch(); // Ask for last name
+                    switch (Console.readInt()) {
+                        case 1:
+                            GUI.employeeSearch("Last name:"); // Ask for last name
+                            String lname = Console.readString(); // Read the input
+                            EmployeeClass employee = EmployeeDatabase.findEmployeeByLName(lname); // Search for employee by last name
+                            if (employee != null) { // Check if employee was found
+                                foundEmployees.add(employee); // Add employee to the list
+                            }
+                            break;
+                        case 2:
+                            GUI.employeeSearch("{ALL} Last name:"); // Ask for all last names
+                            String lnameAll = Console.readString(); // Read the input
+                            foundEmployees = EmployeeDatabase.searchAllEmployeesLName(lnameAll); // Search for all employees by last name
+                            break;
+                        case 3: // Back option
+                            break;
+                        default:
+                            GUI.invalidOption(); // prints out an error message
+                            break;
+                    }
+                    break;
+                default:
+                    GUI.invalidOption(); // prints out an error message
+                    break;
+            }
         } catch (Exception e) {
-            GUI.error(e.getMessage() + " [EmployeeSearchByName]");
-            return null;
+            GUI.error(e.getMessage() + " [EmployeeSearchByName]"); // prints out an error message
         }
+        return foundEmployees;
     }
+
+    /**
+     * Search for an employee by hire year.
+     * @return the employee object
+     */
     public static EmployeeClass EmployeeSearchByHireYear(){
         try {
-            GUI.employeeSearch("[Hire Year]");
-            int hireYear = Console.readInt();
-            return EmployeeDatabase.searchEmployeeByHireYear(hireYear);
+            GUI.employeeSearch("[Hire Year]"); // Ask for hire year
+            int hireYear = Console.readInt(); // Read the input
+            return EmployeeDatabase.searchEmployeeByHireYear(hireYear); // Search for employee by hire year
         } catch (Exception e) {
-            GUI.error(e.getMessage() + " [EmployeeSearchByHireYear]");
+            GUI.error(e.getMessage() + " [EmployeeSearchByHireYear]"); // prints out an error message
             return null;
         }
     }
     //endregion
 
     //region ADD EMPLOYEE MENU
+    /**
+     * Displays the Add Employee menu.
+     * Add Employee or Exit to Main Menu.
+     */
     public static void addMenu() {
         try {
 
-            boolean continueAddMenu = true;
+            boolean continueAddMenu = true; // Flag to continue the loop
             while (continueAddMenu) {
-                GUI.addMenu();
-                switch (Console.readInt()) {
+                GUI.addMenu(); // prints out the add menu
+                switch (Console.readInt()) { // Switch statement to display the menu
                     case 1: // ADD EMPLOYEE
                         EmployeeAdd();
                         break;
@@ -179,25 +279,31 @@ public class Controller {
                 }
             }
         } catch (Exception e) {
-            GUI.error(e.getMessage() + " [addMenu]");
+            GUI.error(e.getMessage() + " [addMenu]"); // prints out an error message
         }
     }
     //endregion
 
     //region ADD EMPLOYEE FUNCTIONALITY
+    /**
+     * Adds an employee to the database.
+     * Asks for the first name, last name, and hire year.
+     * Creates a new employee object and adds it to the database.
+     * automatically assigns it an ID based off of database parameters
+     */
     public static void EmployeeAdd(){
-        int ID = EmployeeDatabase.findNextID();
-        GUI.askFirstName();
-        String fname = Console.readString().toUpperCase();
+        int ID = EmployeeDatabase.findNextID(); // Find the next available ID
+        GUI.askFirstName(); // Ask for first name
+        String fname = Console.readString().toUpperCase(); // Ask for first name
         GUI.askLastName();
         String lname = Console.readString().toUpperCase(); // Ask for last name
-        GUI.askHireYear(); // Ask for hire year
-        int hireYear = Console.readInt();
-        EmployeeClass employee = new EmployeeClass(ID, fname, lname, hireYear);
+        GUI.askHireYear();
+        int hireYear = Console.readInt(); // Ask for hire year
+        EmployeeClass employee = new EmployeeClass(ID, fname, lname, hireYear); // Create a new employee object
         if(EmployeeDatabase.addEmployeeToArray(employee)){
             //employee can be added
-            EmployeeDatabase.sortEmployees();
-            EmployeeFiles.addFile(employee); // saves the employee data to a file
+            EmployeeDatabase.sortEmployees(); // Sort the employees
+            EmployeeFiles.addFile(employee,true); // saves the employee data to a file
         } else {
             //employee already exists
             GUI.error("Employee already exists!"); // prints out an error message
@@ -206,6 +312,10 @@ public class Controller {
     //endregion
 
     //region DELETE EMPLOYEE MENU
+    /**
+     * Displays the deleted Menu.
+     * Delete an Employee (Deletes from both long & long serialized paths, AND database)
+     */
     public static void deleteMenu() {
         try {
 
@@ -231,14 +341,23 @@ public class Controller {
     //endregion  MENU
 
     //region DELETE EMPLOYEE FUNCTIONALITY
+    /**
+     * Deletes an employee from the database.
+     * Asks for the employee ID.
+     * Searches for the employee in the database.
+     * Removes the employee from the database.
+     * Deletes the employee file.
+     * Displays a success message if the employee was deleted.
+     */
     public static void EmployeeDelete() {
+        EmployeeDatabase.displayAllEmployees();
         GUI.employeeSearch("[ID]");
         int id = Console.readInt(); // Ask for employee ID
         if(id < 0) {
             GUI.error("ID cannot be negative.");
             return;
         }
-        EmployeeClass employee = EmployeeDatabase.searchEmployeeByID(id); // Search for employee
+        EmployeeClass employee = EmployeeDatabase.findEmployeeByID(id); // Search for employee
         if (employee != null) {
             if (EmployeeDatabase.removeEmployeeFromArray(employee)) {
                 GUI.displayAllEmployees();
@@ -256,6 +375,11 @@ public class Controller {
     //endregion
 
     //region UPDATE EMPLOYEE MENU
+    /**
+     * Displays the update menu.
+     * Update Employee, Update Database from File, or Exit to Main Menu.
+     * Calls the update employee method based on the user input.
+     */
     public static void updateMenu() {
         try {
             boolean continueDeleteMenu = true; // Flag to continue the loop
@@ -283,15 +407,26 @@ public class Controller {
     //endregion
 
     //region UPDATE EMPLOYEE FUNCTIONALITY
+    /**
+     * re-reads the FILES/file path and updates database based off of saved data (.txt/.ser)
+     */
     public static void updateEmployeesFromFile(){
         EmployeeFiles.readFile(); // reads the file
     }
+
+    /**
+     * Updates an employee in the database.
+     * Asks for the employee ID.
+     * Searches for the employee in the database.
+     * Asks for the new first name, last name, and hire year.
+     * Updates the employee details.
+     */
     public static void EmployeeUpdate() {
         try {
             EmployeeDatabase.displayAllEmployees();
             GUI.employeeSearch("[ID]");
             int id = Console.readInt(); // Ask for employee ID
-            EmployeeClass employee = EmployeeDatabase.searchEmployeeByID(id);
+            EmployeeClass employee = EmployeeDatabase.findEmployeeByID(id);
             if (employee != null) {
                 GUI.askFirstName(); // Ask for first name
                 String fname = Console.readString().toUpperCase();
@@ -309,7 +444,7 @@ public class Controller {
                 EmployeeFiles.deleteFile(id);
 
                 // Save new details to file
-                EmployeeFiles.addFile(employee); // Save new details to file
+                EmployeeFiles.addFile(employee,true); // Save new details to file
 
                 GUI.displayMessage("Employee updated successfully.");
             } else {
@@ -320,10 +455,4 @@ public class Controller {
         }
     }
     //endregion
-
-
-
-
-
-
 }

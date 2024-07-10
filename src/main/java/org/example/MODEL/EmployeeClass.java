@@ -1,10 +1,12 @@
 package org.example.MODEL;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 
 public class EmployeeClass implements Serializable {
     //region VARS
+    @Serial
     private static final long serialVersionUID = 5814635088039616293L;
     private int id;
     private String firstName;
