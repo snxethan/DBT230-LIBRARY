@@ -18,11 +18,10 @@ public class Controller {
      * Calls the method to update the employees from the file.
      */
     public static void startApplication() {
+        //FIXME
         ConsoleTimer.startTimer("startApplication"); // Start the timer
-        EmployeeFiles.choosePath(); // calls the choose path method
         GUI.start(); // prints out the start message
         updateEmployeesFromFile(); // updates the employees from the file
-        EmployeeFiles.syncFiles(); // calls the sync files method
         ConsoleTimer.stopTimer("startApplication"); // stops the timer
         mainMenu(); // calls the main menu
     }
@@ -51,7 +50,6 @@ public class Controller {
                         updateMenu(); // calls the update menu
                         break;
                     case 5: // EXIT Employee
-                        EmployeeFiles.syncFiles();
                         GUI.end(); // prints out the end message
                         System.exit(0); // exits the application
                         break;
