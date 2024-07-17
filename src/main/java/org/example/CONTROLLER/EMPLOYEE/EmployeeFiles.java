@@ -122,7 +122,7 @@ public class EmployeeFiles {
         }
 
         /**
-         * Overrides the readClassDescriptor method to lookup the EmployeeClass.
+         * Overrides the readClassDescriptor method to look up the EmployeeClass.
          * If the class name is "edu.neumont.dbt230.Employee", it will return the EmployeeClass.
          * @return the object stream class
          */
@@ -236,9 +236,8 @@ public class EmployeeFiles {
      * If the path is invalid, it will print an error message.
      */
     public static void choosePath() {
-        GUI.choosePath(); // Display path options to the user
         try {
-            int choice = Console.readInt(); // Get user input
+            int choice = Console.getIntInput(GUI.choosePath()); // Get user input
             switch (choice) {
                 case 1: // Set the upload path to the long folder
                     uploadPath = longPath;

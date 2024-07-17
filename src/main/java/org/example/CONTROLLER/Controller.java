@@ -37,8 +37,7 @@ public class Controller {
     public static void mainMenu() {
         try {
             while (true) {
-                GUI.mainMenuGUI(); // prints out the main menu
-                switch (Console.readInt()) {
+                switch (Console.getIntInput(GUI.mainMenuGUI())) {
                     case 1: // DISPLAY Employee
                         displayMenu(); // calls the display menu
                         break;
@@ -84,8 +83,7 @@ public class Controller {
         try {
             boolean continueDisplayMenu = true; // Flag to continue the loop
             while (continueDisplayMenu) { // Loop to display the menu
-                GUI.displaysMenu();
-                switch (Console.readInt()) { // Switch statement to display the menu
+                switch (Console.getIntInput(GUI.displaysMenu())) { // Switch statement to display the menu
                     case 1: // DISPLAY ALL EMPLOYEES
                         EmployeeDisplayALL();
                         break;
@@ -123,8 +121,7 @@ public class Controller {
         try {
             boolean continueSearchMenu = true; // Flag to continue the loop
             while (continueSearchMenu) { // Loop to display the menu
-                GUI.searchMenu(); // prints out the search menu
-                int choice = Console.readInt(); // reads the user input
+                int choice = Console.getIntInput(GUI.searchMenu()); // reads the user input
                 switch (choice) { // Switch statement to display the menu
                     case 1: // Search by ID
                         EmployeeClass employeeByID = EmployeeSearchByID(); // Search for employee by ID
@@ -164,8 +161,7 @@ public class Controller {
      */
     public static EmployeeClass EmployeeSearchByID() {
         try {
-            GUI.employeeSearch("[ID]"); // Ask for employee ID
-            int id = Console.readInt(); // Ask for employee ID
+            int id = Console.getIntInput(GUI.employeeSearch("[ID]")); // Ask for employee ID
             return EmployeeDatabase.findEmployeeByID(id); // Search for employee by ID
         } catch (Exception e) {
             GUI.error(e.getMessage() + " [EmployeeSearchByID]"); // prints out an error message
@@ -181,22 +177,18 @@ public class Controller {
     public static List<EmployeeClass> EmployeeSearchByName() {
         List<EmployeeClass> foundEmployees = new ArrayList<>(); // List to store found employees
         try {
-            GUI.askName(); // Ask for name
-            switch (Console.readInt()) {
+            switch (Console.getIntInput(GUI.askName())) {
                 case 1:
-                    GUI.askFirstNameSearch(); // Ask for first name
-                    switch (Console.readInt()) {
+                    switch (Console.getIntInput( GUI.askFirstNameSearch())) {
                         case 1:
-                            GUI.employeeSearch("First name:"); // Ask for first name
-                            String fname = Console.readString(); // Read the input
+                            String fname = Console.getStringInput(GUI.employeeSearch("First name:")); // Read the input
                             EmployeeClass employee = EmployeeDatabase.findEmployeeByFName(fname); // Search for employee by first name
                             if (employee != null) {  // Check if employee was found
                                 foundEmployees.add(employee); // Add employee to the list
                             }
                             break;
                         case 2:
-                            GUI.employeeSearch("{ALL} First name:"); // Ask for all first names
-                            String fnameAll = Console.readString(); // Read the input
+                            String fnameAll = Console.getStringInput( GUI.employeeSearch("{ALL} First name:")); // Read the input
                             foundEmployees = EmployeeDatabase.searchAllEmployeesFName(fnameAll); // Search for all employees by first name
                             break;
                         case 3: // Back option
@@ -207,19 +199,16 @@ public class Controller {
                     }
                     break;
                 case 2:
-                    GUI.askLastNameSearch(); // Ask for last name
-                    switch (Console.readInt()) {
+                    switch (Console.getIntInput( GUI.askLastNameSearch())) {
                         case 1:
-                            GUI.employeeSearch("Last name:"); // Ask for last name
-                            String lname = Console.readString(); // Read the input
+                            String lname = Console.getStringInput( GUI.employeeSearch("Last name:")); // Read the input
                             EmployeeClass employee = EmployeeDatabase.findEmployeeByLName(lname); // Search for employee by last name
                             if (employee != null) { // Check if employee was found
                                 foundEmployees.add(employee); // Add employee to the list
                             }
                             break;
                         case 2:
-                            GUI.employeeSearch("{ALL} Last name:"); // Ask for all last names
-                            String lnameAll = Console.readString(); // Read the input
+                            String lnameAll = Console.getStringInput(GUI.employeeSearch("{ALL} Last name:")); // Read the input
                             foundEmployees = EmployeeDatabase.searchAllEmployeesLName(lnameAll); // Search for all employees by last name
                             break;
                         case 3: // Back option
@@ -245,8 +234,7 @@ public class Controller {
      */
     public static EmployeeClass EmployeeSearchByHireYear(){
         try {
-            GUI.employeeSearch("[Hire Year]"); // Ask for hire year
-            int hireYear = Console.readInt(); // Read the input
+            int hireYear = Console.getIntInput( GUI.employeeSearch("[Hire Year]")); // Read the input
             return EmployeeDatabase.searchEmployeeByHireYear(hireYear); // Search for employee by hire year
         } catch (Exception e) {
             GUI.error(e.getMessage() + " [EmployeeSearchByHireYear]"); // prints out an error message
@@ -265,8 +253,7 @@ public class Controller {
 
             boolean continueAddMenu = true; // Flag to continue the loop
             while (continueAddMenu) {
-                GUI.addMenu(); // prints out the add menu
-                switch (Console.readInt()) { // Switch statement to display the menu
+                switch (Console.getIntInput(GUI.addMenu())) { // Switch statement to display the menu
                     case 1: // ADD EMPLOYEE
                         EmployeeAdd();
                         break;
@@ -293,12 +280,9 @@ public class Controller {
      */
     public static void EmployeeAdd(){
         int ID = EmployeeDatabase.findNextID(); // Find the next available ID
-        GUI.askFirstName(); // Ask for first name
-        String fname = Console.readString().toUpperCase(); // Ask for first name
-        GUI.askLastName();
-        String lname = Console.readString().toUpperCase(); // Ask for last name
-        GUI.askHireYear();
-        int hireYear = Console.readInt(); // Ask for hire year
+        String fname = Console.getStringInput(GUI.askFirstName()).toUpperCase(); // Ask for first name
+        String lname = Console.getStringInput( GUI.askLastName()).toUpperCase(); // Ask for last name
+        int hireYear = Console.getIntInput( GUI.askHireYear()); // Ask for hire year
         EmployeeClass employee = new EmployeeClass(ID, fname, lname, hireYear); // Create a new employee object
         if(EmployeeDatabase.addEmployeeToArray(employee)){
             //employee can be added
@@ -321,8 +305,7 @@ public class Controller {
 
             boolean continueDeleteMenu = true; // Flag to continue the loop
             while (continueDeleteMenu) { // Loop to display the menu
-                GUI.deleteMenu();
-                switch (Console.readInt()) {
+                switch (Console.getIntInput(GUI.deleteMenu())){
                     case 1: // DELETE EMPLOYEE
                         EmployeeDelete();
                         break;
@@ -351,8 +334,7 @@ public class Controller {
      */
     public static void EmployeeDelete() {
         EmployeeDatabase.displayAllEmployees();
-        GUI.employeeSearch("[ID]");
-        int id = Console.readInt(); // Ask for employee ID
+        int id = Console.getIntInput(GUI.employeeSearch("[ID]")); // Ask for employee ID
         if(id < 0) {
             GUI.error("ID cannot be negative.");
             return;
@@ -360,7 +342,7 @@ public class Controller {
         EmployeeClass employee = EmployeeDatabase.findEmployeeByID(id); // Search for employee
         if (employee != null) {
             if (EmployeeDatabase.removeEmployeeFromArray(employee)) {
-                GUI.displayAllEmployees();
+                Console.writeLnCyan(GUI.displayAllEmployees());
                 EmployeeFiles.deleteFile(employee.getId()); // Delete file
                 GUI.displayMessage("Employee & file successfully deleted."); // Success message
             } else {
@@ -384,8 +366,7 @@ public class Controller {
         try {
             boolean continueDeleteMenu = true; // Flag to continue the loop
             while (continueDeleteMenu) { // Loop to display the menu
-                GUI.updateMenu();
-                switch (Console.readInt()) {
+                switch (Console.getIntInput(GUI.updateMenu())) {
                     case 1: // UPDATE EMPLOYEE
                         EmployeeUpdate(); // calls the update employee method
                         break;
@@ -424,16 +405,12 @@ public class Controller {
     public static void EmployeeUpdate() {
         try {
             EmployeeDatabase.displayAllEmployees();
-            GUI.employeeSearch("[ID]");
-            int id = Console.readInt(); // Ask for employee ID
+            int id = Console.getIntInput(GUI.employeeSearch("[ID]")); // Ask for employee ID
             EmployeeClass employee = EmployeeDatabase.findEmployeeByID(id);
             if (employee != null) {
-                GUI.askFirstName(); // Ask for first name
-                String fname = Console.readString().toUpperCase();
-                GUI.askLastName(); // Ask for last name
-                String lname = Console.readString().toUpperCase();
-                GUI.askHireYear(); // Ask for hire year
-                int hireYear = Console.readInt();
+                String fname = Console.getStringInput(GUI.askFirstName()).toUpperCase();
+                String lname = Console.getStringInput(GUI.askLastName()).toUpperCase();
+                int hireYear = Console.getIntInput(GUI.askHireYear());
 
                 // Update employee details
                 employee.setFName(fname); // Update first name
