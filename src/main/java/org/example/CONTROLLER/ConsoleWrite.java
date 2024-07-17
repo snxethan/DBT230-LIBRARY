@@ -10,7 +10,7 @@ import java.time.format.DateTimeFormatter;
 //CTRL SHIFT -  = Collapse all code
 //CTRL SHIFT +  = Expand all code
 @SuppressWarnings("unused")
-public class Console {
+public class ConsoleWrite {
 
     private static final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
@@ -44,28 +44,28 @@ public class Console {
     private static final String RESET = "\u001B[0m";
 
     public static void writeLnYellow(String text){
-        System.out.println(Console.YELLOW + text + RESET);
+        System.out.println(ConsoleWrite.YELLOW + text + RESET);
     }
     public static void writeLnBlue(String text){
-        System.out.println(Console.BLUE + text + RESET);
+        System.out.println(ConsoleWrite.BLUE + text + RESET);
     }
     public static void writeLnRed(String text){
-        System.out.println(Console.RED + text + RESET);
+        System.out.println(ConsoleWrite.RED + text + RESET);
     }
     public static void writeLnGreen(String text){
-        System.out.println(Console.GREEN + text + RESET);
+        System.out.println(ConsoleWrite.GREEN + text + RESET);
     }
     public static void writeLnPurple(String text){
-        System.out.println(Console.PURPLE + text + RESET);
+        System.out.println(ConsoleWrite.PURPLE + text + RESET);
     }
     public static void writeLnCyan(String text){
-        System.out.println(Console.CYAN + text + RESET);
+        System.out.println(ConsoleWrite.CYAN + text + RESET);
     }
     public static void writeLnWhite(String text){
-        System.out.println(Console.WHITE + text + RESET);
+        System.out.println(ConsoleWrite.WHITE + text + RESET);
     }
     public static void writeLnBlack(String text){
-        System.out.println(Console.BLACK + text + RESET);
+        System.out.println(ConsoleWrite.BLACK + text + RESET);
     }
 
     public static String getStringWithColor(String text, TextColor color){
@@ -258,7 +258,7 @@ public class Console {
                 bLoop = (isRequired && (strReturn.isEmpty()));
 
             } catch (Exception ex) {
-                Console.write("ERROR" + ex.getMessage(), TextColor.RED);
+                ConsoleWrite.write("ERROR" + ex.getMessage(), TextColor.RED);
             }
             // is this required
         }
@@ -276,7 +276,7 @@ public class Console {
                     return num;
 
                 }
-                Console.write("{INVALID INPUT}, Please try again!\n", TextColor.RED);
+                ConsoleWrite.write("{INVALID INPUT}, Please try again!\n", TextColor.RED);
             }
         }
         return num;
@@ -305,7 +305,7 @@ public class Console {
                 if (num == 0 && !isRequired) {
                     return num;
                 }
-                Console.write("{INVALID INPUT}, Please try again!\n", TextColor.RED);
+                ConsoleWrite.write("{INVALID INPUT}, Please try again!\n", TextColor.RED);
             }
         }
         return num;
@@ -351,7 +351,7 @@ public class Console {
                 response = Integer.parseInt(responseS);
                 if(response < min || response > max){
                     response = -1;
-                    Console.writeLn("Number must be between " + min + " and " + max + "!");
+                    ConsoleWrite.writeLn("Number must be between " + min + " and " + max + "!");
                 }
             } catch (NumberFormatException n) {
                 System.out.println("You entered an invalid number.");
@@ -419,7 +419,7 @@ public class Console {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM-dd-yyyy");
         LocalDate date = LocalDate.now();
         do {
-            Console.writeLn(String.format("Enter a date between %s and %s :", minDate.format(formatter), maxDate.format(formatter)));
+            ConsoleWrite.writeLn(String.format("Enter a date between %s and %s :", minDate.format(formatter), maxDate.format(formatter)));
             date = getDateInput();
         }while(date.isBefore(minDate) || date.isAfter(maxDate));
 
@@ -502,28 +502,28 @@ public class Console {
     //BLACK, RED, GREEN, YELLOW, BLUE, PURPLE, CYAN, WHITE
     private static String getTextColorText(TextColor textColor){
         return switch (textColor) {
-            case RED -> Console.RED;
-            case GREEN -> Console.GREEN;
-            case YELLOW -> Console.YELLOW;
-            case BLUE -> Console.BLUE;
-            case PURPLE -> Console.PURPLE;
-            case CYAN -> Console.CYAN;
-            case BLACK -> Console.BLACK;
-            case WHITE -> Console.WHITE;
+            case RED -> ConsoleWrite.RED;
+            case GREEN -> ConsoleWrite.GREEN;
+            case YELLOW -> ConsoleWrite.YELLOW;
+            case BLUE -> ConsoleWrite.BLUE;
+            case PURPLE -> ConsoleWrite.PURPLE;
+            case CYAN -> ConsoleWrite.CYAN;
+            case BLACK -> ConsoleWrite.BLACK;
+            case WHITE -> ConsoleWrite.WHITE;
             default -> RESET;
         };
     }
 
     private static String getBackgroundColorText(BackgroundColor backgroundColor){
         return switch (backgroundColor) {
-            case RED -> Console.RED_BACKGROUND;
-            case GREEN -> Console.GREEN_BACKGROUND;
-            case YELLOW -> Console.YELLOW_BACKGROUND;
-            case BLUE -> Console.BLUE_BACKGROUND;
-            case PURPLE -> Console.PURPLE_BACKGROUND;
-            case CYAN -> Console.CYAN_BACKGROUND;
-            case BLACK -> Console.BLACK_BACKGROUND;
-            case WHITE -> Console.WHITE_BACKGROUND;
+            case RED -> ConsoleWrite.RED_BACKGROUND;
+            case GREEN -> ConsoleWrite.GREEN_BACKGROUND;
+            case YELLOW -> ConsoleWrite.YELLOW_BACKGROUND;
+            case BLUE -> ConsoleWrite.BLUE_BACKGROUND;
+            case PURPLE -> ConsoleWrite.PURPLE_BACKGROUND;
+            case CYAN -> ConsoleWrite.CYAN_BACKGROUND;
+            case BLACK -> ConsoleWrite.BLACK_BACKGROUND;
+            case WHITE -> ConsoleWrite.WHITE_BACKGROUND;
             default -> RESET;
         };
     }

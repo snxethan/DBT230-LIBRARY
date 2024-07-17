@@ -1,6 +1,6 @@
 package org.example.VIEW;
 
-import org.example.CONTROLLER.Console;
+import org.example.CONTROLLER.ConsoleWrite;
 import org.example.MODEL.EmployeeClass;
 
 import java.util.List;
@@ -9,44 +9,44 @@ public class GUI {
 
     //region INITIALIZATION & ERRORS
     public static void start() {
-        Console.writeLnCyan( "\n----- SIMPLE PERSISTENCE STARTED ----- \n");
-        Console.writeLnCyan("Adding Employees from file...\n");
+        ConsoleWrite.writeLnCyan( "\n----- SIMPLE PERSISTENCE STARTED ----- \n");
+        ConsoleWrite.writeLnCyan("Adding Employees from file...\n");
     }
     public static void readingPath(String path){
-        Console.writeLnCyan("Reading data from path... " + path);
+        ConsoleWrite.writeLnCyan("Reading data from path... " + path);
     }
     public static void initializedEmployees(){
-        Console.writeLnCyan("Employees Initialized from File...\n");
+        ConsoleWrite.writeLnCyan("Employees Initialized from File...\n");
     }
     public static void arrayEmployee(EmployeeClass employee){
-        Console.writeLnCyan("Employee #" + employee.getId() + " Added to Database!");
+        ConsoleWrite.writeLnCyan("Employee #" + employee.getId() + " Added to Database!");
     }
     public static void arrayEmployees(){
-        Console.writeLnCyan("File Data Added to Database!\n");
+        ConsoleWrite.writeLnCyan("File Data Added to Database!\n");
     }
     public static void sortEmployeeDatabase(){
-        Console.writeLnCyan("Employee Database Sorted by [ID]");
+        ConsoleWrite.writeLnCyan("Employee Database Sorted by [ID]");
     }
     public static void emptyEmployeeDatabase(){
-        Console.writeLnRed("Employee Database is Empty!\n");
+        ConsoleWrite.writeLnRed("Employee Database is Empty!\n");
     }
     public static void errorAddingEmployeeFile(){
-        Console.writeLnRed("Error Adding Employee from File!\n");
+        ConsoleWrite.writeLnRed("Error Adding Employee from File!\n");
     }
     public static void errorReadingFile(String error){
-        Console.writeLnRed("Error Reading File!\n" + error);
+        ConsoleWrite.writeLnRed("Error Reading File!\n" + error);
     }
     public static void error(String error){
-        Console.writeLnRed("Error: " + error);
+        ConsoleWrite.writeLnRed("Error: " + error);
     }
     public static void invalidOption(){
-        Console.writeLnRed("Invalid option!");
+        ConsoleWrite.writeLnRed("Invalid option!");
     }
     public static void end() {
-        Console.writeLnCyan("\n----- SIMPLE PERSISTENCE ENDED ----- \n");
+        ConsoleWrite.writeLnCyan("\n----- SIMPLE PERSISTENCE ENDED ----- \n");
     }
     public static void displayMessage(String message){
-        Console.writeLnCyan(message);
+        ConsoleWrite.writeLnCyan(message);
     }
     //endregion
 
@@ -110,13 +110,13 @@ public class GUI {
 
     //region EMPLOYEE LOGIC
     public static void displayEmployee(EmployeeClass employee){
-        Console.writeLnCyan( "#" + employee.getId()
+        ConsoleWrite.writeLnCyan( "#" + employee.getId()
                 + " / \"" + employee.getFName() + " " + employee.getLName()
                 + "\" / " + employee.getHireYear());
     }
     public static void displayEmployees(List<EmployeeClass> employees) {
         if (employees.isEmpty()) {
-            Console.writeLnRed("NO Employees Found!");
+            ConsoleWrite.writeLnRed("NO Employees Found!");
         } else {
             for (EmployeeClass employee : employees) {
                 displayEmployee(employee);
@@ -144,7 +144,7 @@ public class GUI {
         return "Search Employee by " + criteria + ":";
     }
     public static void totalEmployeesFound(int total){
-        Console.writeLnCyan("TOTAL Employees Found: " + total);
+        ConsoleWrite.writeLnCyan("TOTAL Employees Found: " + total);
     }
 
     public static String askName(){
@@ -200,10 +200,10 @@ public class GUI {
 
     //region TIMER LOGIC
     public static void timerOut(String name, long elapsed, String timeType){
-        Console.writeLnYellow("{" + name + " took " + elapsed + " " + timeType + "}");
+        ConsoleWrite.writeLnYellow("{" + name + " took " + elapsed + " " + timeType + "}");
     }
     public static void timerFailed(String name){
-        Console.writeLnYellow("{" + name + " could NOT be started}");
+        ConsoleWrite.writeLnYellow("{" + name + " could NOT be started}");
     }
     //endregion
 }
