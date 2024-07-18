@@ -12,17 +12,8 @@ public class GUI {
         ConsoleWrite.writeLnCyan( "\n----- SIMPLE PERSISTENCE STARTED ----- \n");
         ConsoleWrite.writeLnCyan("Adding Employees from file...\n");
     }
-    public static void readingPath(String path){
-        ConsoleWrite.writeLnCyan("Reading data from path... " + path);
-    }
-    public static void initializedEmployees(){
-        ConsoleWrite.writeLnCyan("Employees Initialized from File...\n");
-    }
     public static void arrayEmployee(EmployeeClass employee){
         ConsoleWrite.writeLnCyan("Employee #" + employee.getId() + " Added to Database!");
-    }
-    public static void arrayEmployees(){
-        ConsoleWrite.writeLnCyan("File Data Added to Database!\n");
     }
     public static void sortEmployeeDatabase(){
         ConsoleWrite.writeLnCyan("Employee Database Sorted by [ID]");
@@ -32,9 +23,6 @@ public class GUI {
     }
     public static void errorAddingEmployeeFile(){
         ConsoleWrite.writeLnRed("Error Adding Employee from File!\n");
-    }
-    public static void errorReadingFile(String error){
-        ConsoleWrite.writeLnRed("Error Reading File!\n" + error);
     }
     public static void error(String error){
         ConsoleWrite.writeLnRed("Error: " + error);
@@ -124,8 +112,8 @@ public class GUI {
         }
     }
 
-    public static String displayAllEmployees(){
-        return ("Displaying ALL Employees...");
+    public static void displayAllEmployees(){
+        ConsoleWrite.writeLnCyan ("Displaying ALL Employees...");
     }
     public static String searchMenu(){
         return """
@@ -185,18 +173,6 @@ public class GUI {
     }
     //endregion
 
-    //region FILE LOGIC
-
-    public static String choosePath() {
-        return """
-                Select file path: \
-
-                 1) /long\
-
-                 2) /long serialized""";
-    }
-
-    //endregion
 
     //region TIMER LOGIC
     public static void timerOut(String name, long elapsed, String timeType){

@@ -1,7 +1,7 @@
 package org.example.CONTROLLER;
 
 import org.example.CONTROLLER.EMPLOYEE.EmployeeDatabase;
-import org.example.CONTROLLER.EMPLOYEE.EmployeeFiles;
+import org.example.CONTROLLER.EMPLOYEE.EmployeeMongo;
 import org.example.MODEL.EmployeeClass;
 import org.example.VIEW.GUI;
 
@@ -285,7 +285,7 @@ public class Controller {
         if(EmployeeDatabase.addEmployeeToArray(employee)){
             //employee can be added
             EmployeeDatabase.sortEmployees(); // Sort the employees
-            EmployeeFiles.addFile(employee,true); // saves the employee data to a file
+            EmployeeMongo.addEmployeeMongo(employee,true); // saves the employee data to a file
         } else {
             //employee already exists
             GUI.error("Employee already exists!"); // prints out an error message
@@ -340,8 +340,8 @@ public class Controller {
         EmployeeClass employee = EmployeeDatabase.findEmployeeByID(id); // Search for employee
         if (employee != null) {
             if (EmployeeDatabase.removeEmployeeFromArray(employee)) {
-                ConsoleWrite.writeLnCyan(GUI.displayAllEmployees());
-                EmployeeFiles.deleteFile(employee.getId()); // Delete file
+                GUI.displayAllEmployees(); // Display all employees
+                EmployeeMongo.deleteEmployeeMongo(employee.getId()); // Delete file
                 GUI.displayMessage("Employee & file successfully deleted."); // Success message
             } else {
                 GUI.error("Error deleting employee from array."); // Error message
@@ -390,7 +390,7 @@ public class Controller {
      * re-reads the FILES/file path and updates database based off of saved data (.txt/.ser)
      */
     public static void updateEmployeesFromFile(){
-        EmployeeFiles.readFile(); // reads the file
+        EmployeeMongo.readMongoDB(); // reads the file
     }
 
     /**
@@ -416,10 +416,10 @@ public class Controller {
                 employee.setHireYear(hireYear);
 
                 // Delete old file
-                EmployeeFiles.deleteFile(id);
+                EmployeeMongo.deleteEmployeeMongo(id);
 
                 // Save new details to file
-                EmployeeFiles.addFile(employee,true); // Save new details to file
+                EmployeeMongo.addEmployeeMongo(employee,true); // Save new details to file
 
                 GUI.displayMessage("Employee updated successfully.");
             } else {
