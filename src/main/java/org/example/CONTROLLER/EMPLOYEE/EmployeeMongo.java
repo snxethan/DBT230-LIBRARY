@@ -10,12 +10,13 @@ import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
 import org.bson.Document;
+import org.example.VIEW.GUI;
 
 
 public class EmployeeMongo {
 
     public static void connectMongoDB() {
-        String connectionString = "mongodb+srv://snxethan:<password>@dbtii.5r12dl8.mongodb.net/?retryWrites=true&w=majority&appName=DBTII";
+        String connectionString = "mongodb+srv://snxethan:<MshgTUP3qnxFXIQ7>@dbtii.5r12dl8.mongodb.net/?retryWrites=true&w=majority&appName=DBTII";
         ServerApi serverApi = ServerApi.builder()
                 .version(ServerApiVersion.V1)
                 .build();
@@ -31,12 +32,10 @@ public class EmployeeMongo {
                 database.runCommand(new Document("ping", 1));
                 System.out.println("Pinged your deployment. You successfully connected to MongoDB!");
             } catch (MongoException e) {
-                e.printStackTrace();
+                GUI.error("Error connecting to MongoDB: " + e.getMessage());
             }
         }
     }
-
-    //FIXME: remove serialization & txt file handling, handle to .json to mongoDB
 
 
     //region READ FILES
@@ -44,6 +43,7 @@ public class EmployeeMongo {
      * Reads the file and displays the employee data.
      */
     public static void readMongoDB() {
+        //TODO: read the mongo database and update all employees from a .json object and add to local database
     }
     //endregion
 
@@ -52,9 +52,9 @@ public class EmployeeMongo {
 
     /**
      * Deletes a file based on the employee's id.
-     * @param id
      */
-    public static void deleteEmployeeMongo(int id) {
+    public static void deleteEmployeeMongo(EmployeeClass employee) {
+        //TODO: delete employee from mongo database by id
 
     }
     //endregion
@@ -64,13 +64,14 @@ public class EmployeeMongo {
      * Adds employee
      */
     public static void addEmployeeMongo(EmployeeClass employee, boolean wantDisplay) {
+        //TODO: add employee to mongo database, want display will display GUI elements
 
     }
     //endregion
 
     //region UPDATE FILE
     public static void updateEmployeeMongo(EmployeeClass employee){
-        //FIXME:
+        //TODO: update a specific employee based off of the employee id
     }
     //endregion
 }

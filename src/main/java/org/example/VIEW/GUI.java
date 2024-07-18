@@ -10,7 +10,7 @@ public class GUI {
     //region INITIALIZATION & ERRORS
     public static void start() {
         ConsoleWrite.writeLnCyan( "\n----- SIMPLE PERSISTENCE STARTED ----- \n");
-        ConsoleWrite.writeLnCyan("Adding Employees from file...\n");
+        ConsoleWrite.writeLnCyan("Adding Employees from MongoDB...\n");
     }
     public static void arrayEmployee(EmployeeClass employee){
         ConsoleWrite.writeLnCyan("Employee #" + employee.getId() + " Added to Database!");
@@ -21,8 +21,8 @@ public class GUI {
     public static void emptyEmployeeDatabase(){
         ConsoleWrite.writeLnRed("Employee Database is Empty!\n");
     }
-    public static void errorAddingEmployeeFile(){
-        ConsoleWrite.writeLnRed("Error Adding Employee from File!\n");
+    public static void errorAddingEmployeeMongoDB(){
+        ConsoleWrite.writeLnRed("Error Adding Employee from MongoDB!\n");
     }
     public static void error(String error){
         ConsoleWrite.writeLnRed("Error: " + error);
@@ -89,7 +89,7 @@ public class GUI {
 
                  1. Update Employee\
 
-                 2. Update Database from File\
+                 2. Update Database from MongoDB\
 
                  3. Back\
                 """;

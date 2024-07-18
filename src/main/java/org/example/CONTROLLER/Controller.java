@@ -15,13 +15,14 @@ public class Controller {
      * Starts the application.
      * Calls the method to choose the path.
      * Calls the method to start the GUI.
-     * Calls the method to update the employees from the file.
+     * Calls the method to update the employees from the mongodb database.
      */
     public static void startApplication() {
         //FIXME
         ConsoleTimer.startTimer("startApplication"); // Start the timer
         GUI.start(); // prints out the start message
-        updateEmployeesFromFile(); // updates the employees from the file
+        EmployeeMongo.connectMongoDB(); // connects to the database
+        updateEmployeesFromMongoDB(); // updates the employees from the mongodb
         ConsoleTimer.stopTimer("startApplication"); // stops the timer
         mainMenu(); // calls the main menu
     }
@@ -285,7 +286,7 @@ public class Controller {
         if(EmployeeDatabase.addEmployeeToArray(employee)){
             //employee can be added
             EmployeeDatabase.sortEmployees(); // Sort the employees
-            EmployeeMongo.addEmployeeMongo(employee,true); // saves the employee data to a file
+            EmployeeMongo.addEmployeeMongo(employee,true); // saves the employee data to the mongodb database
         } else {
             //employee already exists
             GUI.error("Employee already exists!"); // prints out an error message
@@ -327,7 +328,7 @@ public class Controller {
      * Asks for the employee ID.
      * Searches for the employee in the database.
      * Removes the employee from the database.
-     * Deletes the employee file.
+     * Deletes the employee mongodb object.
      * Displays a success message if the employee was deleted.
      */
     public static void EmployeeDelete() {
@@ -341,8 +342,8 @@ public class Controller {
         if (employee != null) {
             if (EmployeeDatabase.removeEmployeeFromArray(employee)) {
                 GUI.displayAllEmployees(); // Display all employees
-                EmployeeMongo.deleteEmployeeMongo(employee.getId()); // Delete file
-                GUI.displayMessage("Employee & file successfully deleted."); // Success message
+                EmployeeMongo.deleteEmployeeMongo(employee); // Delete employee from mongodb
+                GUI.displayMessage("Employee successfully deleted."); // Success message
             } else {
                 GUI.error("Error deleting employee from array."); // Error message
             }
@@ -357,7 +358,7 @@ public class Controller {
     //region UPDATE EMPLOYEE MENU
     /**
      * Displays the update menu.
-     * Update Employee, Update Database from File, or Exit to Main Menu.
+     * Update Employee, Update Database from mongodb, or Exit to Main Menu.
      * Calls the update employee method based on the user input.
      */
     public static void updateMenu() {
@@ -368,8 +369,8 @@ public class Controller {
                     case 1: // UPDATE EMPLOYEE
                         EmployeeUpdate(); // calls the update employee method
                         break;
-                    case 2: // UPDATE DATABASE FROM FILE
-                        updateEmployeesFromFile();
+                    case 2: // UPDATE DATABASE FROM DATABASE
+                        updateEmployeesFromMongoDB();
                         break;
                     case 3: // EXIT TO MAIN MENU
                         continueDeleteMenu = false; // Set flag too false to exit loop
@@ -387,10 +388,10 @@ public class Controller {
 
     //region UPDATE EMPLOYEE FUNCTIONALITY
     /**
-     * re-reads the FILES/file path and updates database based off of saved data (.txt/.ser)
+     * re-reads the mongodb database and updates the employees in the database
      */
-    public static void updateEmployeesFromFile(){
-        EmployeeMongo.readMongoDB(); // reads the file
+    public static void updateEmployeesFromMongoDB(){
+        EmployeeMongo.readMongoDB(); // reads the mongoDB
     }
 
     /**
@@ -415,11 +416,11 @@ public class Controller {
                 employee.setLName(lname); // Update last name
                 employee.setHireYear(hireYear);
 
-                // Delete old file
-                EmployeeMongo.deleteEmployeeMongo(id);
+                // Delete old employee from mongodb
+                EmployeeMongo.deleteEmployeeMongo(employee);
 
-                // Save new details to file
-                EmployeeMongo.addEmployeeMongo(employee,true); // Save new details to file
+                // Save new details to mongodb
+                EmployeeMongo.addEmployeeMongo(employee,true); // Save new details to mongodb database
 
                 GUI.displayMessage("Employee updated successfully.");
             } else {

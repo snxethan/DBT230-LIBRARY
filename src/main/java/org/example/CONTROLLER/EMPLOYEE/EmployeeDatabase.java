@@ -22,31 +22,12 @@ public class EmployeeDatabase {
     //endregion
 
     //region ADD EMPLOYEES
-    /*
-     * Parses the line and adds the employee data.
-     * If the line does not match the pattern, it will print an error message.
-     * Call the method to add the employee data to the array list.
-     * @param line the line from the text file
-     */
-    public static EmployeeClass addEmployeeFromFile(String line) {
-        Pattern pattern = Pattern.compile("(\\d+),\\s*(\\w+),\\s*(\\w+),\\s*(\\d+)"); // regex pattern to match the line
-        Matcher matcher = pattern.matcher(line); // matches the line with the pattern
-        if (matcher.find()) { // if the line matches the pattern
-            int eID = Integer.parseInt(matcher.group(1)); // gets the employee id
-            String eFName = matcher.group(2); // gets the employee first name
-            String eLName = matcher.group(3); // gets the employee last name
-            int eHireYear = Integer.parseInt(matcher.group(4)); // gets the employee hire year
-//            System.out.println("Employee data found in file: " + line); // prints out the employee data
-            EmployeeClass employee = new EmployeeClass(eID, eFName, eLName, eHireYear);
-            addEmployeeToArray(employee); // adds the employee data
-            return employee;
+    public static void addEmployeeFromMongoDB(EmployeeClass employee) {
+        if (addEmployeeToArray(employee)) {
+            GUI.arrayEmployee(employee);
         } else {
-            GUI.errorAddingEmployeeFile(); // prints out an error message
-            return null;
+            GUI.errorAddingEmployeeMongoDB();
         }
-    }
-    public static void addEmployeeFromFile(EmployeeClass employee) {
-        addEmployeeToArray(employee); // adds the employee data
     }
     //endregion
 
@@ -242,7 +223,7 @@ public class EmployeeDatabase {
      */
     public static int findNextID() {
         ConsoleTimer.startTimer("FindNextID");
-        Controller.updateEmployeesFromFile();
+        Controller.updateEmployeesFromMongoDB();
         // Sort employees by ID to ensure they are in ascending order
         sortEmployees();
 
