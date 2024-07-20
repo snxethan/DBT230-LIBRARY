@@ -22,11 +22,13 @@ public class EmployeeDatabase {
     //endregion
 
     //region ADD EMPLOYEES
-    public static void addEmployeeFromMongoDB(EmployeeClass employee) {
+    public static void addEmployeeFromMongoDB(EmployeeClass employee, boolean wantDisplay) {
         if (addEmployeeToArray(employee)) {
-            GUI.arrayEmployee(employee);
+            if (wantDisplay)
+                GUI.arrayEmployee(employee);
         } else {
-            GUI.errorAddingEmployeeMongoDB();
+            if(wantDisplay)
+                GUI.errorAddingEmployeeMongoDB();
         }
     }
     //endregion

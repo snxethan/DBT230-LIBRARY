@@ -22,7 +22,7 @@ public class GUI {
         ConsoleWrite.writeLnRed("Employee Database is Empty!\n");
     }
     public static void errorAddingEmployeeMongoDB(){
-        ConsoleWrite.writeLnRed("Error Adding Employee from MongoDB!\n");
+        ConsoleWrite.writeLnRed("Error Adding Employee from MongoDB!");
     }
     public static void error(String error){
         ConsoleWrite.writeLnRed("Error: " + error);
@@ -169,10 +169,9 @@ public class GUI {
                  3) Back""";
     }
     public static String askHireYear() {
-        return "\\nEnter Employee's Hire Year: ";
+        return "\nEnter Employee's Hire Year: ";
     }
     //endregion
-
 
     //region TIMER LOGIC
     public static void timerOut(String name, long elapsed, String timeType){
@@ -180,6 +179,18 @@ public class GUI {
     }
     public static void timerFailed(String name){
         ConsoleWrite.writeLnYellow("{" + name + " could NOT be started}");
+    }
+    //endregion
+
+    //region MONGODB
+    public static void pingMongoDB(String databaseName){
+        ConsoleWrite.writeLnGreen("Pinged deployment [" + databaseName + "]. You successfully connected to MongoDB!");
+    }
+    public static void pingCollection(String collectionName){
+        ConsoleWrite.writeLnGreen("[" +collectionName + "] collection selected!");
+    }
+    public static void updatedFromMongoDB(){
+        ConsoleWrite.writeLnGreen("Database Updated from MongoDB!");
     }
     //endregion
 }

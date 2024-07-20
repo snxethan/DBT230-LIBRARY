@@ -12,17 +12,21 @@ public class Controller {
 
     //region START ENTIRE APPLICATION
     /**
-     * Starts the application.
-     * Calls the method to choose the path.
-     * Calls the method to start the GUI.
-     * Calls the method to update the employees from the mongodb database.
+     * Starts the application
+     * Call the method to start the GUI.
+     * Call the method to update the employees from the mongodb database.
      */
     public static void startApplication() {
         //FIXME
         ConsoleTimer.startTimer("startApplication"); // Start the timer
         GUI.start(); // prints out the start message
         EmployeeMongo.connectMongoDB(); // connects to the database
-        updateEmployeesFromMongoDB(); // updates the employees from the mongodb
+        try {
+            updateEmployeesFromMongoDB(); // updates the employees from the mongodb
+            mainMenu(); // calls the main menu
+        } finally {
+            EmployeeMongo.closeMongoDB(); // closes the MongoDB connection
+        }
         ConsoleTimer.stopTimer("startApplication"); // stops the timer
         mainMenu(); // calls the main menu
     }
@@ -42,7 +46,7 @@ public class Controller {
                         displayMenu(); // calls the display menu
                         break;
                     case 2: // ADD Employees
-                        addMenu(); // calls the add menu
+                        addMenu(); // calls the added menu
                         break;
                     case 3: // DELETE Employee
                         deleteMenu(); // calls the delete menu
@@ -286,7 +290,7 @@ public class Controller {
         if(EmployeeDatabase.addEmployeeToArray(employee)){
             //employee can be added
             EmployeeDatabase.sortEmployees(); // Sort the employees
-            EmployeeMongo.addEmployeeMongo(employee,true); // saves the employee data to the mongodb database
+            EmployeeMongo.createEmployeeMongo(employee,true); // saves the employee data to the mongodb database
         } else {
             //employee already exists
             GUI.error("Employee already exists!"); // prints out an error message
@@ -359,7 +363,7 @@ public class Controller {
     /**
      * Displays the update menu.
      * Update Employee, Update Database from mongodb, or Exit to Main Menu.
-     * Calls the update employee method based on the user input.
+     * Call the update employee method based on the user input.
      */
     public static void updateMenu() {
         try {
@@ -371,6 +375,7 @@ public class Controller {
                         break;
                     case 2: // UPDATE DATABASE FROM DATABASE
                         updateEmployeesFromMongoDB();
+                        GUI.updatedFromMongoDB(); // prints out a message
                         break;
                     case 3: // EXIT TO MAIN MENU
                         continueDeleteMenu = false; // Set flag too false to exit loop
@@ -391,7 +396,7 @@ public class Controller {
      * re-reads the mongodb database and updates the employees in the database
      */
     public static void updateEmployeesFromMongoDB(){
-        EmployeeMongo.readMongoDB(); // reads the mongoDB
+        EmployeeMongo.readMongoDB(false); // reads the mongoDB
     }
 
     /**
@@ -416,11 +421,8 @@ public class Controller {
                 employee.setLName(lname); // Update last name
                 employee.setHireYear(hireYear);
 
-                // Delete old employee from mongodb
-                EmployeeMongo.deleteEmployeeMongo(employee);
-
-                // Save new details to mongodb
-                EmployeeMongo.addEmployeeMongo(employee,true); // Save new details to mongodb database
+                // Update employee in MongoDB
+                EmployeeMongo.updateEmployeeMongo(employee);
 
                 GUI.displayMessage("Employee updated successfully.");
             } else {
