@@ -6,7 +6,7 @@ import org.example.CONTROLLER.EMPLOYEE.EmployeeMongo;
 
 public class Main {
     public static void main(String[] args) {
-//        EmployeeMongo.insertAllTxtFilesToMongoDB("src/main/java/org/example/FILES/long/");
+//        EmployeeMongo.importRecordstoMongoDB("src/main/java/org/example/FILES/long/");
         Controller.startApplication(); // starts the application
     }
 }

@@ -200,7 +200,7 @@ public class EmployeeMongo {
         *
         * @param directoryPath The path of the directory containing the .txt files
      **/
-    public static void insertAllTxtFilesToMongoDB(String directoryPath) {
+    public static void importRecordstoMongoDB(String directoryPath) {
         ConsoleTimer.startTimer("MongoDBInsert"); // Start timer
         connectMongoDB(); // Connect to MongoDB
         if (collection == null) {
