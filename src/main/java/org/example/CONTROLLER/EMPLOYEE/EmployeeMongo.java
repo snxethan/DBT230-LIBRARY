@@ -146,18 +146,10 @@ public class EmployeeMongo {
                 connectMongoDB();
             }
 
-            // Create filter to find the document by id
-            Bson filter = Filters.eq("id", employee.getId());
-
+            deleteEmployeeMongo(employee); // Delete document (to avoid duplicate entries)
             // Create update operations
-            Bson updates = Updates.combine(
-                    Updates.set("firstName", employee.getFName()),
-                    Updates.set("lastName", employee.getLName()),
-                    Updates.set("hireYear", employee.getHireYear())
-            );
+            createEmployeeMongo(employee, false); // Add updated document
 
-            // Execute update
-            collection.updateOne(filter, updates); // Update document
         } catch (MongoException e) {
             GUI.error("Error updating Employee in MongoDB: " + e.getMessage()); // Display error message
         } finally {
