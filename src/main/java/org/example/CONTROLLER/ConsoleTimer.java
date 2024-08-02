@@ -47,7 +47,12 @@ public class ConsoleTimer {
 
                             if (elapsed > 24){
                                 elapsed /= 24;//hours to days
-                                timeType = "days";
+                                timeType = "day(s)";
+
+                                if (elapsed > 360){
+                                    elapsed /= 360;//hours to days
+                                    timeType = "Year(s)";
+                                }
                             }
                         }
                     }
