@@ -145,9 +145,7 @@ public class EmployeeMongo {
             if (mongoClient == null) {
                 connectMongoDB();
             }
-
             deleteEmployeeMongo(employee); // Delete document (to avoid duplicate entries)
-            // Create update operations
             createEmployeeMongo(employee, false); // Add updated document
 
         } catch (MongoException e) {

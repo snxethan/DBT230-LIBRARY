@@ -2,6 +2,7 @@ package org.example.MODEL;
 
 import java.io.Serial;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Objects;
 
 public class EmployeeClass implements Serializable {
@@ -54,8 +55,8 @@ public class EmployeeClass implements Serializable {
     public void setHireYear(int hireYear) {
         if(hireYear < 0) {
             throw new IllegalArgumentException("Hire year cannot be negative");
-        } else if (hireYear > 2024) {
-            ;this.hireYear = 2024;
+        } else if (hireYear > LocalDate.now().getYear() ){
+            ;this.hireYear = LocalDate.now().getYear();
         } else {
             this.hireYear = hireYear;
         }
