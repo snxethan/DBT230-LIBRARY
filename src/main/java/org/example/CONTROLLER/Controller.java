@@ -14,18 +14,17 @@ public class Controller {
     /**
      * Starts the application
      * Call the method to start the GUI.
-     * Call the method to update the employees from the mongodb database.
+     * Call the method to update the employees from the RedisDB database.
      */
     public static void startApplication() {
-        //FIXME
         ConsoleTimer.startTimer("startApplication"); // Start the timer
         GUI.start(); // prints out the start message
         EmployeeRedis.redisConnect(); // connects to the database
         try {
-            updateEmployeesFromMongoDB(); // updates the employees from the mongodb
+            updateEmployeesFromRedisDB(); // updates the employees from the RedisDB
             mainMenu(); // calls the main menu
         } finally {
-            EmployeeRedis.redisClose(); // closes the MongoDB connection
+            EmployeeRedis.redisClose(); // closes the RedisDB connection
         }
         ConsoleTimer.stopTimer("startApplication"); // stops the timer
         mainMenu(); // calls the main menu
@@ -290,7 +289,7 @@ public class Controller {
         if(EmployeeDatabase.addEmployeeToArray(employee)){
             //employee can be added
             EmployeeDatabase.sortEmployees(); // Sort the employees
-            EmployeeRedis.redisCreateEmployee(employee,true); // saves the employee data to the mongodb database
+            EmployeeRedis.redisCreateEmployee(employee,true); // saves the employee data to the RedisDB database
         } else {
             //employee already exists
             GUI.error("Employee already exists!"); // prints out an error message
@@ -332,7 +331,7 @@ public class Controller {
      * Asks for the employee ID.
      * Searches for the employee in the database.
      * Removes the employee from the database.
-     * Deletes the employee mongodb object.
+     * Deletes the employee RedisDB object.
      * Displays a success message if the employee was deleted.
      */
     public static void EmployeeDelete() {
@@ -346,7 +345,7 @@ public class Controller {
         if (employee != null) {
             if (EmployeeDatabase.removeEmployeeFromArray(employee)) {
                 GUI.displayAllEmployees(); // Display all employees
-                EmployeeRedis.redisDeleteEmployee(employee); // Delete employee from mongodb
+                EmployeeRedis.redisDeleteEmployee(employee); // Delete employee from RedisDB
                 GUI.displayMessage("Employee successfully deleted."); // Success message
             } else {
                 GUI.error("Error deleting employee from array."); // Error message
@@ -362,7 +361,7 @@ public class Controller {
     //region UPDATE EMPLOYEE MENU
     /**
      * Displays the update menu.
-     * Update Employee, Update Database from mongodb, or Exit to Main Menu.
+     * Update Employee, Update Database from RedisDB, or Exit to Main Menu.
      * Call the update employee method based on the user input.
      */
     public static void updateMenu() {
@@ -374,8 +373,8 @@ public class Controller {
                         EmployeeUpdate(); // calls the update employee method
                         break;
                     case 2: // UPDATE DATABASE FROM DATABASE
-                        updateEmployeesFromMongoDB();
-                        GUI.updatedFromMongoDB(); // prints out a message
+                        updateEmployeesFromRedisDB();
+                        GUI.updatedFromRedisDB(); // prints out a message
                         break;
                     case 3: // EXIT TO MAIN MENU
                         continueDeleteMenu = false; // Set flag too false to exit loop
@@ -393,10 +392,10 @@ public class Controller {
 
     //region UPDATE EMPLOYEE FUNCTIONALITY
     /**
-     * re-reads the mongodb database and updates the employees in the database
+     * re-reads the RedisDB database and updates the employees in the database
      */
-    public static void updateEmployeesFromMongoDB(){
-        EmployeeRedis.redisReadDB(false); // reads the mongoDB
+    public static void updateEmployeesFromRedisDB(){
+        EmployeeRedis.redisReadDB(false); // reads the RedisDB
     }
 
     /**
@@ -421,7 +420,7 @@ public class Controller {
                 employee.setLName(lname); // Update last name
                 employee.setHireYear(hireYear);
 
-                // Update employee in MongoDB
+                // Update employee in RedisDB
                 EmployeeRedis.redisUpdateEmployee(employee);
 
                 GUI.displayMessage("Employee updated successfully.");

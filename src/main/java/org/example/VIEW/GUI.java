@@ -10,7 +10,7 @@ public class GUI {
     //region INITIALIZATION & ERRORS
     public static void start() {
         ConsoleWrite.writeLnCyan( "\n----- SIMPLE PERSISTENCE STARTED ----- \n");
-        ConsoleWrite.writeLnCyan("Adding Employees from MongoDB...\n");
+        ConsoleWrite.writeLnCyan("Adding Employees from RedisDB...\n");
     }
     public static void arrayEmployee(EmployeeClass employee){
         ConsoleWrite.writeLnCyan("Employee #" + employee.getId() + " Added to Database!");
@@ -21,8 +21,8 @@ public class GUI {
     public static void emptyEmployeeDatabase(){
         ConsoleWrite.writeLnRed("Employee Database is Empty!\n");
     }
-    public static void errorAddingEmployeeMongoDB(){
-        ConsoleWrite.writeLnRed("Error Adding Employee from MongoDB!");
+    public static void errorAddingEmployeeRedisDB(){
+        ConsoleWrite.writeLnRed("Error Adding Employee from RedisDB!");
     }
     public static void error(String error){
         ConsoleWrite.writeLnRed("Error: " + error);
@@ -89,7 +89,7 @@ public class GUI {
 
                  1. Update Employee\
 
-                 2. Update Database from MongoDB\
+                 2. Update Database from RedisDB\
 
                  3. Back\
                 """;
@@ -182,15 +182,15 @@ public class GUI {
     }
     //endregion
 
-    //region MONGODB
-    public static void pingMongoDB(String databaseName){
-        ConsoleWrite.writeLnGreen("Pinged deployment [" + databaseName + "]. You successfully connected to MongoDB!");
+    //region RedisDB
+    public static void pingRedisDB(String databaseName){
+        ConsoleWrite.writeLnGreen("Pinged deployment [" + databaseName + "]. You successfully connected to RedisDB!");
     }
     public static void pingCollection(String collectionName){
         ConsoleWrite.writeLnGreen("[" +collectionName + "] collection selected!");
     }
-    public static void updatedFromMongoDB(){
-        ConsoleWrite.writeLnGreen("Database Updated from MongoDB!");
+    public static void updatedFromRedisDB(){
+        ConsoleWrite.writeLnGreen("Database Updated from RedisDB!");
     }
     //endregion
 }

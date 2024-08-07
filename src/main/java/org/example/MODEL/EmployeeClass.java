@@ -1,5 +1,7 @@
 package org.example.MODEL;
 
+import com.google.gson.Gson;
+
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -88,16 +90,13 @@ public class EmployeeClass implements Serializable {
     }
 
     public String toJson(){
-        return "{\"id\":" + id + ",\"firstName\":\"" + firstName + "\",\"lastName\":\"" + lastName + "\",\"hireYear\":" + hireYear + "}";
-    }
+        Gson gson = new Gson();
+        return gson.toJson(this);
+        }
 
     public static EmployeeClass fromJson(String json){
-        String[] data = json.split(",");
-        int id = Integer.parseInt(data[0].split(":")[1]);
-        String firstName = data[1].split(":")[1].replace("\"", "");
-        String lastName = data[2].split(":")[1].replace("\"", "");
-        int hireYear = Integer.parseInt(data[3].split(":")[1]);
-        return new EmployeeClass(id, firstName, lastName, hireYear);
+        Gson gson = new Gson();
+        return gson.fromJson(json, EmployeeClass.class);
     }
 
     //override methods to allow comparing file objects and prevents duplicate array employee objects from being added.

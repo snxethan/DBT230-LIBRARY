@@ -26,7 +26,7 @@ public class EmployeeDatabase {
                 GUI.arrayEmployee(employee);
         } else {
             if(wantDisplay)
-                GUI.errorAddingEmployeeMongoDB();
+                GUI.errorAddingEmployeeRedisDB();
         }
     }
     //endregion
@@ -223,7 +223,7 @@ public class EmployeeDatabase {
      */
     public static int findNextID() {
         ConsoleTimer.startTimer("FindNextID");
-        Controller.updateEmployeesFromMongoDB();
+        Controller.updateEmployeesFromRedisDB();
         // Sort employees by ID to ensure they are in ascending order
         sortEmployees();
 
