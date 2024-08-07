@@ -8,8 +8,6 @@ import org.example.VIEW.GUI;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class EmployeeDatabase {
 
@@ -22,7 +20,7 @@ public class EmployeeDatabase {
     //endregion
 
     //region ADD EMPLOYEES
-    public static void addEmployeeFromMongoDB(EmployeeClass employee, boolean wantDisplay) {
+    public static void addEmployeeFromRedisDB(EmployeeClass employee, boolean wantDisplay) {
         if (addEmployeeToArray(employee)) {
             if (wantDisplay)
                 GUI.arrayEmployee(employee);

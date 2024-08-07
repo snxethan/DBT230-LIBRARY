@@ -87,6 +87,19 @@ public class EmployeeClass implements Serializable {
         return employeeString.toString();
     }
 
+    public String toJson(){
+        return "{\"id\":" + id + ",\"firstName\":\"" + firstName + "\",\"lastName\":\"" + lastName + "\",\"hireYear\":" + hireYear + "}";
+    }
+
+    public static EmployeeClass fromJson(String json){
+        String[] data = json.split(",");
+        int id = Integer.parseInt(data[0].split(":")[1]);
+        String firstName = data[1].split(":")[1].replace("\"", "");
+        String lastName = data[2].split(":")[1].replace("\"", "");
+        int hireYear = Integer.parseInt(data[3].split(":")[1]);
+        return new EmployeeClass(id, firstName, lastName, hireYear);
+    }
+
     //override methods to allow comparing file objects and prevents duplicate array employee objects from being added.
     @Override // Compares the object with the specified object for order
     public boolean equals(Object obj) {
