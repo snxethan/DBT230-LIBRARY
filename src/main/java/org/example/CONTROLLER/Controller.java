@@ -1,7 +1,7 @@
 package org.example.CONTROLLER;
 
 import org.example.CONTROLLER.EMPLOYEE.EmployeeDatabase;
-import org.example.CONTROLLER.EMPLOYEE.EmployeeMongo;
+import org.example.CONTROLLER.EMPLOYEE.EmployeeRedis;
 import org.example.MODEL.EmployeeClass;
 import org.example.VIEW.GUI;
 
@@ -20,12 +20,12 @@ public class Controller {
         //FIXME
         ConsoleTimer.startTimer("startApplication"); // Start the timer
         GUI.start(); // prints out the start message
-        EmployeeMongo.connectMongoDB(); // connects to the database
+        EmployeeRedis.redisConnect(); // connects to the database
         try {
             updateEmployeesFromMongoDB(); // updates the employees from the mongodb
             mainMenu(); // calls the main menu
         } finally {
-            EmployeeMongo.closeMongoDB(); // closes the MongoDB connection
+            EmployeeRedis.redisClose(); // closes the MongoDB connection
         }
         ConsoleTimer.stopTimer("startApplication"); // stops the timer
         mainMenu(); // calls the main menu
@@ -290,7 +290,7 @@ public class Controller {
         if(EmployeeDatabase.addEmployeeToArray(employee)){
             //employee can be added
             EmployeeDatabase.sortEmployees(); // Sort the employees
-            EmployeeMongo.createEmployeeMongo(employee,true); // saves the employee data to the mongodb database
+            EmployeeRedis.redisCreateEmployee(employee,true); // saves the employee data to the mongodb database
         } else {
             //employee already exists
             GUI.error("Employee already exists!"); // prints out an error message
@@ -346,7 +346,7 @@ public class Controller {
         if (employee != null) {
             if (EmployeeDatabase.removeEmployeeFromArray(employee)) {
                 GUI.displayAllEmployees(); // Display all employees
-                EmployeeMongo.deleteEmployeeMongo(employee); // Delete employee from mongodb
+                EmployeeRedis.redisDeleteEmployee(employee); // Delete employee from mongodb
                 GUI.displayMessage("Employee successfully deleted."); // Success message
             } else {
                 GUI.error("Error deleting employee from array."); // Error message
@@ -396,7 +396,7 @@ public class Controller {
      * re-reads the mongodb database and updates the employees in the database
      */
     public static void updateEmployeesFromMongoDB(){
-        EmployeeMongo.readMongoDB(false); // reads the mongoDB
+        EmployeeRedis.redisReadDB(false); // reads the mongoDB
     }
 
     /**
@@ -422,7 +422,7 @@ public class Controller {
                 employee.setHireYear(hireYear);
 
                 // Update employee in MongoDB
-                EmployeeMongo.updateEmployeeMongo(employee);
+                EmployeeRedis.redisUpdateEmployee(employee);
 
                 GUI.displayMessage("Employee updated successfully.");
             } else {
