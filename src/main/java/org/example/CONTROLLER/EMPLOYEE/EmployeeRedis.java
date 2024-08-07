@@ -35,7 +35,9 @@ public class EmployeeRedis {
     }
 
     public static void redisAddEmployeesFromDB(boolean wantDisplay) {
+        ConsoleTimer.startTimer("RedisDBAdd"); // Start timer
 
+        ConsoleTimer.stopTimer("RedisDBAdd"); // Stop timer
     }
 
     public static void redisUpdateEmployee(EmployeeClass employee) {
@@ -56,17 +58,8 @@ public class EmployeeRedis {
 
 
 
-    //region MONGODB INITIAL INSERT
+    //region REDIS INITIAL INSERT
     @Deprecated
-    /*
-        * This method is deprecated because it is not used in the application.
-        * This method is used to insert all the .txt files in the given directory to MongoDB.
-        * The format of the .txt files should be as follows:
-        *  id, firstName, lastName, hireYear
-        * 1, John, Doe, 2021
-        *
-        * @param directoryPath The path of the directory containing the .txt files
-     **/
     public static void importRecordsToRedis(String directoryPath) {
         ConsoleTimer.startTimer("RedisDBInsert"); // Start timer
         ConsoleTimer.stopTimer("RedisDBInsert"); // Stop timer
