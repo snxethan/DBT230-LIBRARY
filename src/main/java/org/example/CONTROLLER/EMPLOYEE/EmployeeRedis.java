@@ -35,7 +35,9 @@ public class EmployeeRedis {
     }
 
     public static void redisAddEmployeesFromDB(boolean wantDisplay) {
+        ConsoleTimer.startTimer("RedisDBAdd"); // Start timer
 
+        ConsoleTimer.stopTimer("RedisDBAdd"); // Stop timer
     }
 
     public static void redisUpdateEmployee(EmployeeClass employee) {
