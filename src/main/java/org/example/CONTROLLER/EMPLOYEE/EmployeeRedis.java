@@ -13,6 +13,9 @@ import java.util.stream.Stream;
 
 public class EmployeeRedis {
 
+    // docker exec -it myredis bash
+    // /opt/redislabs/bin/redis-cli -p 12000
+
     //region REDIS CONNECTION
     private static Jedis jedis; // Connection to Redis
 
@@ -96,7 +99,6 @@ public class EmployeeRedis {
 
 
     //region REDIS INITIAL INSERT
-    @Deprecated
     /**
      * Import records to Redis
      * @param directoryPath path to the directory containing the files
@@ -110,6 +112,7 @@ public class EmployeeRedis {
         if (files != null) {
             for (File file : files) {
                 try (Stream<String> stream = Files.lines(Paths.get(file.getPath()))) { // Read file
+                    EmployeeRedis.redisConnect(); // Connect to Redis
                     StringBuilder content = new StringBuilder(); // Create a string builder
                     stream.forEach(content::append); // Append each line to the string builder
 
@@ -120,9 +123,12 @@ public class EmployeeRedis {
                     int hireYear = Integer.parseInt(data[3].trim()); // Assuming the fourth value is the hire year
 
                     EmployeeClass employee = new EmployeeClass(id, firstName, lastName, hireYear); // Create an employee object
-                    redisCreateEmployee(employee, true); // Add employee to Redis
+                    redisCreateEmployee(employee, false); // Add employee to Redis
                 } catch (IOException e) {
                     GUI.error("Error reading file: " + file.getName()); // Display error message
+                } finally {
+                    redisClose(); // Close the connection
+                    GUI.displayMessage("Records imported to Redis!"); // Display message
                 }
             }
         }
