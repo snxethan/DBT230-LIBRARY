@@ -1,0 +1,41 @@
+In other databases, we would use commands such as; create, read, update, and delete. But with Redis we use different commands for
+each function they include; SET, GET, and DEL. If you notice there is no command for an update, SET effectively updates a given
+key with added information, so it works as an update and as an update as well as create. Something else that is beneficial about
+Redis is that these commands are “Atomic” which means that commands are executed sequentially without any interference from other operations.
+
+Pros
+
+    High Performance: Redis operates in-memory, providing extremely fast data access.
+
+    Versatility: Supports various data structures, which can simplify application logic.
+
+    High Availability: Redis allows data to be copied to multiple instances so the system can remain available even if the master (main instance) fails
+
+Cons
+
+    Memory-Dependent: Since Redis stores data in memory, large datasets can require significant RAM.
+
+    No Built-in Complex Querying: Lack of support for complex queries like SQL JOINs. As I mentioned above
+
+    No Transactions: Redis does not support transactions, which can make it difficult to maintain data integrity.
+
+
+
+Caching: Redis is ideal for caching due to its speed and ability to expire keys automatically.
+
+Session Management: Redis’s fast access makes it perfect for storing session data in web applications.
+
+Real-Time Analytics: The ability to handle high throughput makes Redis great for real-time data processing.
+
+
+
+Redis seem decent at handling the data but the initial insert can take some time.
+
+redis handles change in data much like inserting new data so if a lot needs to be changed at once and can take a little bit of time.
+but if it is a small amount of data it is fairly fast.
+
+Redis is designed to handle high volumes of requests efficiently due to its in-memory nature and atomic operations.
+
+What strategies are available within Redis for scaling to solve these sort of problems?
+we could use Redis Cluster, which is a distributed implementation of Redis that allows for sharding data across multiple Redis nodes.
+This can help to distribute the load and improve performance.
