@@ -110,9 +110,9 @@ public class EmployeeRedis {
         File[] files = directory.listFiles((dir, name) -> name.toLowerCase().endsWith(".txt")); // Get all files ending with .txt
 
         if (files != null) {
+            EmployeeRedis.redisConnect(); // Connect to Redis
             for (File file : files) {
                 try (Stream<String> stream = Files.lines(Paths.get(file.getPath()))) { // Read file
-                    EmployeeRedis.redisConnect(); // Connect to Redis
                     StringBuilder content = new StringBuilder(); // Create a string builder
                     stream.forEach(content::append); // Append each line to the string builder
 
@@ -124,13 +124,15 @@ public class EmployeeRedis {
 
                     EmployeeClass employee = new EmployeeClass(id, firstName, lastName, hireYear); // Create an employee object
                     redisCreateEmployee(employee, false); // Add employee to Redis
+                    GUI.displayMessage(employee.getId() + " was imported to redis."); // Display success message
                 } catch (IOException e) {
                     GUI.error("Error reading file: " + file.getName()); // Display error message
                 } finally {
                     redisClose(); // Close the connection
-                    GUI.displayMessage("Records imported to Redis!"); // Display message
                 }
             }
+            GUI.displayMessage("Records imported to Redis!"); // Display message
+
         }
         ConsoleTimer.stopTimer("RedisDBInsert"); // Stop timer
     }
