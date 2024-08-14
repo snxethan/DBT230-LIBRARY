@@ -79,6 +79,7 @@ public class EmployeeDatabase {
         if(employees.isEmpty()) { // if the employee array list is empty
             GUI.emptyEmployeeDatabase();
         } else {
+            sortEmployees();
             GUI.displayAllEmployees();
             for (EmployeeClass employee : employees) { // for each employee in the array list
                 GUI.displayEmployee(employee); // prints out the employee data

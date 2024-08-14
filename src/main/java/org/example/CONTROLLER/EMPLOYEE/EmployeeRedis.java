@@ -124,7 +124,7 @@ public class EmployeeRedis {
 
                     EmployeeClass employee = new EmployeeClass(id, firstName, lastName, hireYear); // Create an employee object
                     redisCreateEmployee(employee, false); // Add employee to Redis
-                    GUI.displayMessage(employee.getId() + " was imported to redis."); // Display success message
+                    GUI.displayMessage(employee.getId() + " was imported to Redis!"); // Display a success message
                 } catch (IOException e) {
                     GUI.error("Error reading file: " + file.getName()); // Display error message
                 } finally {
