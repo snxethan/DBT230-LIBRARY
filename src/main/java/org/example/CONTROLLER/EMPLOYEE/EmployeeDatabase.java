@@ -8,8 +8,6 @@ import org.example.VIEW.GUI;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class EmployeeDatabase {
 
@@ -22,13 +20,13 @@ public class EmployeeDatabase {
     //endregion
 
     //region ADD EMPLOYEES
-    public static void addEmployeeFromMongoDB(EmployeeClass employee, boolean wantDisplay) {
+    public static void addEmployeeFromNEO4J(EmployeeClass employee, boolean wantDisplay) {
         if (addEmployeeToArray(employee)) {
             if (wantDisplay)
                 GUI.arrayEmployee(employee);
         } else {
             if(wantDisplay)
-                GUI.errorAddingEmployeeMongoDB();
+                GUI.errorAddingEmployeeNEO4J();
         }
     }
     //endregion
@@ -225,7 +223,7 @@ public class EmployeeDatabase {
      */
     public static int findNextID() {
         ConsoleTimer.startTimer("FindNextID");
-        Controller.updateEmployeesFromMongoDB();
+        Controller.updateEmployeesFromNEO4J();
         // Sort employees by ID to ensure they are in ascending order
         sortEmployees();
 

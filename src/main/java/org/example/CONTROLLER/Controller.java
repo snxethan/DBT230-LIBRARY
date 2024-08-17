@@ -1,7 +1,7 @@
 package org.example.CONTROLLER;
 
 import org.example.CONTROLLER.EMPLOYEE.EmployeeDatabase;
-import org.example.CONTROLLER.EMPLOYEE.EmployeeMongo;
+import org.example.CONTROLLER.EMPLOYEE.EmployeeNEO;
 import org.example.MODEL.EmployeeClass;
 import org.example.VIEW.GUI;
 
@@ -14,18 +14,18 @@ public class Controller {
     /**
      * Starts the application
      * Call the method to start the GUI.
-     * Call the method to update the employees from the mongodb database.
+     * Call the method to update the employees from the neo4j database.
      */
     public static void startApplication() {
         //FIXME
         ConsoleTimer.startTimer("startApplication"); // Start the timer
         GUI.start(); // prints out the start message
-        EmployeeMongo.connectMongoDB(); // connects to the database
+        EmployeeNEO.connectNEO4J(); // connects to the database
         try {
-            updateEmployeesFromMongoDB(); // updates the employees from the mongodb
+            updateEmployeesFromNEO4J(); // updates the employees from the neo4j
             mainMenu(); // calls the main menu
         } finally {
-            EmployeeMongo.closeMongoDB(); // closes the MongoDB connection
+            EmployeeNEO.closeNEO4J(); // closes the neo4j connection
         }
         ConsoleTimer.stopTimer("startApplication"); // stops the timer
         mainMenu(); // calls the main menu
@@ -290,7 +290,7 @@ public class Controller {
         if(EmployeeDatabase.addEmployeeToArray(employee)){
             //employee can be added
             EmployeeDatabase.sortEmployees(); // Sort the employees
-            EmployeeMongo.createEmployeeMongo(employee,true); // saves the employee data to the mongodb database
+            EmployeeNEO.createEmployeeNEO4J(employee,true); // saves the employee data to the neo4j database
         } else {
             //employee already exists
             GUI.error("Employee already exists!"); // prints out an error message
@@ -332,7 +332,7 @@ public class Controller {
      * Asks for the employee ID.
      * Searches for the employee in the database.
      * Removes the employee from the database.
-     * Deletes the employee mongodb object.
+     * Deletes the employee neo4j object.
      * Displays a success message if the employee was deleted.
      */
     public static void EmployeeDelete() {
@@ -346,7 +346,7 @@ public class Controller {
         if (employee != null) {
             if (EmployeeDatabase.removeEmployeeFromArray(employee)) {
                 GUI.displayAllEmployees(); // Display all employees
-                EmployeeMongo.deleteEmployeeMongo(employee); // Delete employee from mongodb
+                EmployeeNEO.deleteEmployeeNEO4J(employee); // Delete employee from neo4j
                 GUI.displayMessage("Employee successfully deleted."); // Success message
             } else {
                 GUI.error("Error deleting employee from array."); // Error message
@@ -362,7 +362,7 @@ public class Controller {
     //region UPDATE EMPLOYEE MENU
     /**
      * Displays the update menu.
-     * Update Employee, Update Database from mongodb, or Exit to Main Menu.
+     * Update Employee, Update Database from neo4j, or Exit to Main Menu.
      * Call the update employee method based on the user input.
      */
     public static void updateMenu() {
@@ -374,8 +374,8 @@ public class Controller {
                         EmployeeUpdate(); // calls the update employee method
                         break;
                     case 2: // UPDATE DATABASE FROM DATABASE
-                        updateEmployeesFromMongoDB();
-                        GUI.updatedFromMongoDB(); // prints out a message
+                        updateEmployeesFromNEO4J();
+                        GUI.updatedFromNEO4J(); // prints out a message
                         break;
                     case 3: // EXIT TO MAIN MENU
                         continueDeleteMenu = false; // Set flag too false to exit loop
@@ -393,10 +393,10 @@ public class Controller {
 
     //region UPDATE EMPLOYEE FUNCTIONALITY
     /**
-     * re-reads the mongodb database and updates the employees in the database
+     * re-reads the neo4j database and updates the employees in the database
      */
-    public static void updateEmployeesFromMongoDB(){
-        EmployeeMongo.readMongoDB(false); // reads the mongoDB
+    public static void updateEmployeesFromNEO4J(){
+        EmployeeNEO.readNEO4J(false); // reads the neo4j
     }
 
     /**
@@ -421,8 +421,8 @@ public class Controller {
                 employee.setLName(lname); // Update last name
                 employee.setHireYear(hireYear);
 
-                // Update employee in MongoDB
-                EmployeeMongo.updateEmployeeMongo(employee);
+                // Update employee in neo4j
+                EmployeeNEO.updateEmployeeNEO4J(employee);
 
                 GUI.displayMessage("Employee updated successfully.");
             } else {
