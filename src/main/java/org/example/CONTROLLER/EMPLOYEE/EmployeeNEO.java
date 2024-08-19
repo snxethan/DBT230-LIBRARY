@@ -142,6 +142,19 @@ public class EmployeeNEO {
         ConsoleTimer.stopTimer("NEO4JDelete"); // Stop timer
     }
 
+    public static void deleteRecordsNEO4J() {
+        ConsoleTimer.startTimer("NEO4JDelete"); // Start timer
+        ensureConnection();
+        // drop EVERYTHING in NEO4J
+        try (Session session = driver.session(SessionConfig.builder().withDatabase("neo4j").build())) {
+            String deleteAllQuery = "MATCH (n) DETACH DELETE n";
+            session.run(deleteAllQuery);
+        } catch (Exception e) {
+            GUI.error("Error deleting records in NEO4J: " + e);
+        }
+        ConsoleTimer.stopTimer("NEO4JDelete"); // Stop timer
+    }
+
     /***
      * Imports records from a directory to the NEO4J database
      * @param directoryPath The path to the directory
@@ -164,8 +177,8 @@ public class EmployeeNEO {
                     }
                 }
             }
-            setUpRelationships("src/Data/friendships.csv");
-            setUpRelationships("src/Data/reportsTo.csv");
+            setUpRelationships("src/Data/friendships.csv", "FRIENDS_WITH");
+            setUpRelationships("src/Data/reportsTo.csv", "REPORTS_TO"); // Ensure this line is present
         } catch (FileNotFoundException e) {
             System.out.println("File not found: " + e);
         } catch (Exception e) {
@@ -175,7 +188,7 @@ public class EmployeeNEO {
     }
 
 
-    public static void setUpRelationships(String filepath) {
+    public static void setUpRelationships(String filepath, String relationshipType) {
         ConsoleTimer.startTimer("NEO4JRelationships"); // Start timer
         if (filepath == null) {
             GUI.error("File path is null");
@@ -185,20 +198,19 @@ public class EmployeeNEO {
         // builds session to allow querying onto the database
         try (Session session = driver.session(SessionConfig.builder().withDatabase("neo4j").build())) {
             BufferedReader reader = new BufferedReader(new FileReader(filepath)); // reader to read info
-            reader.readLine(); // reads the header so they are not used
+            String line;
 
             // while loop that reads file, parses to int, then creates the query to create the relationship
-            while (reader.ready()) {
-                String line = reader.readLine();
+            while ((line = reader.readLine()) != null) {
                 int pid;
-                int friendshipID;
+                int relationshipID;
 
                 // need to parse ID to int because it won't query as a string
                 try {
                     GUI.displayMessage("Processing line: " + line); // Debugging information
                     pid = Integer.parseInt(line.split(",")[0]);
-                    friendshipID = Integer.parseInt(line.split(",")[1]);
-                    GUI.displayMessage("ID1: " + pid + " ID2: " + friendshipID); // Debugging information
+                    relationshipID = Integer.parseInt(line.split(",")[1]);
+                    GUI.displayMessage("ID1: " + pid + " ID2: " + relationshipID); // Debugging information
                 } catch (NumberFormatException e) {
                     GUI.error("Error parsing ID to int: " + e);
                     continue;
@@ -208,11 +220,11 @@ public class EmployeeNEO {
                 StringBuilder relationshipQuery = new StringBuilder();
                 relationshipQuery.append("MATCH (a:Person {ID:$id1}) ");
                 relationshipQuery.append("MATCH (b:Person {ID:$id2}) ");
-                relationshipQuery.append("MERGE (a)-[:FRIENDS_WITH]->(b)");
+                relationshipQuery.append("MERGE (a)-[:" + relationshipType + "]->(b)");
 
                 // run the query, adding in the ids to their preselected spot
                 session.run(relationshipQuery.toString(),
-                        Values.parameters("id1", pid, "id2", friendshipID));
+                        Values.parameters("id1", pid, "id2", relationshipID));
             }
         } catch (IOException e) {
             GUI.error("Error setting up relationships in NEO4J: " + e);
