@@ -18,7 +18,7 @@ public class EmployeeNEO {
     public static void connectNEO4J(){
         final String dbUri = "neo4j://localhost:7687";
         final String dbUser = "neo4j";
-        final String dbPassword = "password";
+        final String dbPassword = "neo12345";
         Config config = Config.builder() // Configuring the connection
                 .withMaxConnectionPoolSize(50)
                 .withConnectionAcquisitionTimeout(60, TimeUnit.SECONDS)
