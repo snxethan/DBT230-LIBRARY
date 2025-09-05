@@ -113,9 +113,9 @@ This project is part of the DBT230 course curriculum.
 
 ## Author(s)
 
-[**Ethan Townsend (snxethan)**](www.ethantownsend.dev)
-Victor Keeler
-Jacob Brincefield
+- [**Ethan Townsend (snxethan)**](www.ethantownsend.dev)
+- Victor Keeler
+- Jacob Brincefield
 
 ---
 
