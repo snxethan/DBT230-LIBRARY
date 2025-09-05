@@ -111,9 +111,11 @@ This will create a JAR file in the `target/` directory that you can distribute a
 
 This project is part of the DBT230 course curriculum.
 
-## Author
+## Author(s)
 
-**EthanTownsend** - *Initial work*
+[**Ethan Townsend (snxethan)**](www.ethantownsend.dev)
+Victor Keeler
+Jacob Brincefield
 
 ---
 
